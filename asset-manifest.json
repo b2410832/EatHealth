@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/EatHealth/static/css/main.8c8b27cf.chunk.css",
+    "main.js": "/EatHealth/static/js/main.6e15cf75.chunk.js",
+    "main.js.map": "/EatHealth/static/js/main.6e15cf75.chunk.js.map",
+    "runtime-main.js": "/EatHealth/static/js/runtime-main.559e04a3.js",
+    "runtime-main.js.map": "/EatHealth/static/js/runtime-main.559e04a3.js.map",
+    "static/js/2.32656a2e.chunk.js": "/EatHealth/static/js/2.32656a2e.chunk.js",
+    "static/js/2.32656a2e.chunk.js.map": "/EatHealth/static/js/2.32656a2e.chunk.js.map",
+    "static/js/3.a9858ec1.chunk.js": "/EatHealth/static/js/3.a9858ec1.chunk.js",
+    "static/js/3.a9858ec1.chunk.js.map": "/EatHealth/static/js/3.a9858ec1.chunk.js.map",
+    "index.html": "/EatHealth/index.html",
+    "static/css/main.8c8b27cf.chunk.css.map": "/EatHealth/static/css/main.8c8b27cf.chunk.css.map",
+    "static/js/2.32656a2e.chunk.js.LICENSE.txt": "/EatHealth/static/js/2.32656a2e.chunk.js.LICENSE.txt",
+    "static/media/logo.6ce24c58.svg": "/EatHealth/static/media/logo.6ce24c58.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.559e04a3.js",
+    "static/js/2.32656a2e.chunk.js",
+    "static/css/main.8c8b27cf.chunk.css",
+    "static/js/main.6e15cf75.chunk.js"
+  ]
+}
