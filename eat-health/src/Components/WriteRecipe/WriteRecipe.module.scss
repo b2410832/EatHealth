@@ -1,0 +1,106 @@
+.container {
+    background-color: #ffffff;
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    .text {
+        font-weight: bold;
+        font-size: 18px;
+        color: #3f3d56;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        span {
+            color: #8a949f;
+            font-weight: normal;
+            font-size: 14px;
+        }
+    }
+    .input {
+        border: 1px solid hsl(0,0%,80%);
+        border-radius: 4px;
+        min-height: 38px;
+        width: 100%;
+        padding-left: 10px;
+        font-size: 16px;;
+    }
+    textarea {
+        resize: none;
+        border: 1px solid hsl(0,0%,80%);
+        border-radius: 4px;
+        width: 100%;
+        min-height: 120px;
+        font-size: 16px;
+        padding: 10px;
+    }
+    .flex {
+        display: flex;
+        justify-content: space-around;
+    }
+    .flex > * {
+        flex: 1;
+    }
+    .recipeType, .portion, .ingredient{
+        margin-right: 20px;
+    }
+    .steps {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+    .steps:not(:last-child) {
+        border-bottom: 1px solid hsl(0,0%,80%);
+    }
+    .stepNumber {
+        font-size: 30px;
+        font-weight: bold;
+        color: #3f3d56;
+        font-style: italic;
+        margin-right: 50px;
+        margin-left: 10px;
+    }
+    .tips {
+        background-color: #fff5da;
+        padding: 10px;
+        margin-bottom: 20px;
+        span {
+            display: inline-block;
+        }
+        mark {
+            display: inline-block;
+            line-height: 0em;
+            padding-bottom: 0.5em;
+            background-color: #fec740;
+        }
+    }
+    .fullBtn {
+        border: none;
+        background-color: #85bf3e;
+        color: #ffffff;
+        width: 200px;
+        height: 50px;
+        border-radius: 30px;
+        outline: none;
+        cursor: pointer;
+        font-size: 16px;
+        margin-right: 20px;
+        letter-spacing: 2px;
+    }
+    .fullBtn:hover {
+        background-color: #72a534;
+    }
+    .lineBtn {
+        border: none;
+        background-color: #ffffff;
+        color: #85bf3e;
+        width: 200px;
+        height: 50px;
+        border-radius: 30px;
+        border: 1px solid #85bf3e;
+        outline: none;
+        cursor: pointer;
+        font-size: 16px;
+        letter-spacing: 2px;
+    }
+}

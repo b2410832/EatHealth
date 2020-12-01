@@ -1,0 +1,66 @@
+.container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 10px;
+    .ingredient{
+        margin-right: 20px;
+    }
+    .qty {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        .grams {
+            width: 50px;
+        }
+    }
+    .qty > * {
+        margin-right: 10px;
+    }
+    .input {
+        border: 1px solid hsl(0,0%,80%);
+        border-radius: 4px;
+        min-height: 38px;
+        width: 100%;
+        padding-left: 10px;
+        font-size: 16px;;
+    }
+    .delete {
+        background-image:url(../../images/delete.png) ;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+    }
+}
+.container > * {
+    flex: 1;
+}
+.text {
+    font-weight: bold;
+    font-size: 18px;
+    color: #3f3d56;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    span {
+        color: #8a949f;
+        font-weight: normal;
+        font-size: 14px;
+    }
+}
+
+.button {
+    border: none;
+    background-color: #85bf3e;
+    color: #ffffff;
+    width: 120px;
+    height: 40px;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 20px;
+    letter-spacing: 1px;
+}
