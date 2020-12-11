@@ -1,7 +1,8 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 import 'firebase/storage';
-import 'firebase/database';
+import 'firebase/auth';
+// import 'firebase/database';
 
 const firebaseConfig = {
     apiKey: "AIzaSyA9vfuI1awPBy6mM1L7brpdp_A8DwRUiXM",
@@ -23,7 +24,12 @@ const db = firebase.firestore();
 //  Create Storage
 const storage = firebase.storage();
 
-// Create Realtime database
-const realtimeDB = firebase.database();
+// // Create Realtime database
+// const realtimeDB = firebase.database();
 
-export { db, storage, realtimeDB };
+// Create Authentication
+const auth = firebase.auth();
+
+
+
+export { db, storage, auth };

@@ -1,4 +1,9 @@
 import { useState } from 'react';
+import firebase from "firebase/app";
+import { db, storage } from '../../firebase';
+import Select from 'react-select';
+import { useHistory } from "react-router-dom";
+
 import UploadImage from '../UploadImage/UploadImage';
 import Ingredients from '../Ingredients/Ingredients';
 import styles from './WriteRecipe.module.scss';
@@ -6,23 +11,25 @@ import foodDatabase from '../../foodDatabase.json';
 import tipsBulb from '../../images/tips-bulb.svg';
 import defaultImg from '../../images/upload.png'
 
-import firebase from "firebase/app";
-import { db, storage } from '../../firebase';
-import Select from 'react-select';
+
 
 // react-select options
 const options = foodDatabase.foods.map(food => ({ value: food.id, label: food.name, ...food }));
-const recipeType = [{ value: 0, label: "健康料理", name:"category"}, { value: 1, label: "減醣料理", name:"category"}, { value: 2, label: "增肌料理", name:"category"}];
-const recipeTime = [{ value: 0, label: "早餐", name:"mealTime"}, { value: 1, label: "午晚餐", name:"mealTime"}, { value: 2, label: "點心", name:"mealTime"}, { value: 3, label: "飲料", name:"mealTime"}];
+const recipeType = [{ value: 0, label: "均衡料理", name:"category"}, { value: 1, label: "減醣料理", name:"category"}, { value: 2, label: "增肌料理", name:"category"}];
+const recipeTime = [{ value: 0, label: "早餐", name:"mealTime"}, { value: 1, label: "午晚餐", name:"mealTime"}, { value: 2, label: "點心", name:"mealTime"}];
 const portion = [{ value: 0, label: "1", name: "portion"}, { value: 1, label: "2", name: "portion"}, { value: 2, label: "3", name: "portion"}, { value: 3, label: "4", name: "portion"}, { value: 4, label: "5", name: "portion"}, { value: 5, label: "6", name: "portion"}, { value: 6, label: "7", name: "portion"}, { value: 7, label: "8", name: "portion"}, { value: 8, label: "9", name: "portion"}, { value: 9, label: "10+", name: "portion"}];
 const cookTime = [{ value: 0, label: "5", name: "cookTime"}, { value: 1, label: "10", name: "cookTime"}, { value: 2, label: "15", name: "cookTime"}, { value: 3, label: "20", name: "cookTime"}, { value: 4, label: "30", name: "cookTime"}, { value: 5, label: "45", name: "cookTime"}, { value: 6, label: "60", name: "cookTime"}, { value: 7, label: "90", name: "cookTime"}, { value: 8, label: "120+", name: "cookTime"}];
 
 
-const WriteRecipe = () => {
+const WriteRecipe = ({user}) => {
+  let history = useHistory();
+  console.log(user);
+
   const [inputs, setInputs] = useState({ title: "", category: "", mealTime: "", summary: "", portion: "",cookTime: "",step1: "",step2: "",step3: "",step4: "",tips: ""});
   const [ingredients, setIngredients] = useState([{uid: `${new Date().getTime()}-1`, value:"", label:"", id:"",type:"", name:"",calorie:0, carb:0, protein:0, fat:0, qty:""}, {uid: `${new Date().getTime()}-2`, value:"", label:"", id:"",type:"", name:"",calorie:0, carb:0, protein:0, fat:0, qty:""}]);
   const [file, setFile] = useState(null);
   const [url, setUrl] = useState(defaultImg);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     setInputs({...inputs, [e.target.name]: e.target.value});
@@ -71,7 +78,7 @@ const WriteRecipe = () => {
 
   const postRecipe = () => {
     if(file) {
-      alert("已發布食譜！");
+      setIsLoading(true);
       const imageId = `${new Date().getTime()}-${file.name}` 
       const uploadTask = storage.ref(`/recipeImages/${imageId}`).put(file);
       return uploadTask.on('state_changed', console.log, console.error, () => {
@@ -94,9 +101,16 @@ const WriteRecipe = () => {
                 image: url,
                 ingredients,
                 createdTime: firebase.firestore.FieldValue.serverTimestamp(),
+                authorId: user.uid,
+                authorPhotoURL: user.photoURL,
+                authorName: user.displayName,
             })
+            setIsLoading(false);
+            history.push("/recipes");
           })
       })
+    } else {
+      alert("請上傳照片");
     }
   };
 
@@ -164,7 +178,7 @@ const WriteRecipe = () => {
         <textarea placeholder="請輸入食譜小叮嚀" name="tips" value={inputs.tips} onChange={handleInputChange}></textarea>
       </div>
       <div className={styles.flex}>
-        <button className={styles.fullBtn} onClick={postRecipe}>發布食譜</button>
+        <button className={styles.fullBtn} onClick={postRecipe}>{isLoading ? "發布中..." : "發布食譜"}</button>
         <button className={styles.lineBtn}>取消</button>
       </div>
     </main>

@@ -15,10 +15,49 @@
         align-items: center;
         justify-content: flex-start;
         width: 50%;
+        .logo {
+            margin-right: 40px;
+        }
         .menu {
             display: flex;
             justify-content: space-around;
             width: 400px;
+        }
+        .link {
+            position: relative;
+            transition: all .2s;
+        }
+        .link::after {
+            content: "";
+            border-bottom: 4px solid #85bf3e;
+            width: 0;
+            display: block;
+            position: absolute;
+            bottom: -24px;
+            transition: all .2s;
+        }
+        .link a:hover{
+            color: #85bf3e;
+        }
+        .link:hover::after {
+            content: "";
+            border-bottom: 4px solid #85bf3e;
+            width: 100%;
+            display: block;
+            position: absolute;
+            bottom: -24px;
+        }
+        .activeMenu {
+            color: #85bf3e;
+            position: relative;
+        }
+        .activeMenu::after {
+            content: "";
+            border-bottom: 4px solid #85bf3e;
+            width: 100%;
+            display: block;
+            position: absolute;
+            bottom: -24px;
         }
     }
     .right {
@@ -26,19 +65,21 @@
         align-items: center;
         .search input{
             border: none;
-            // background-color: #e4e6e9;
             height: 30px;
             outline: none;
-            // padding-left: 5px;
-            // padding-right: 5px;
-            // border-radius: 5px;
             margin-left: 5px;
             border-bottom: 1px solid #e4e6e9;
             transition: all 1s;
+
+            background-color: #f0f0f0;
+            padding-left: 5px;
+            padding-right: 5px;
+            border-radius: 5px;
+            margin-right: 5px;
         }
-        .search input:focus {
-            border-bottom: 1.5px solid #05172c;
-        }
+        // .search input:focus {
+        //     border-bottom: 1.5px solid #05172c;
+        // }
         .log{
             padding: 0 10px;
         }
@@ -49,11 +90,68 @@
             border: none;
             background-color: #85bf3e;
             color: #ffffff;
-            width: 90px;
+            padding-left: 10px;
+            padding-right: 10px;
             height: 30px;
-            border-radius: 15px;
+            border-radius: 5px;
             outline: none;
             cursor: pointer;
+            margin-right: 10px;
+            font-size: 16px;
         }
+        .lineBtn {
+            border: none;
+            background-color: #ffffff;
+            border: 1px solid #85bf3e;
+            color: #85bf3e;
+            padding-left: 10px;
+            padding-right: 10px;
+            height: 30px;
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        .profile {
+            display: flex;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            img {
+                width: 40px;
+                clip-path: circle(50%);
+                margin-right: 5px;
+            }
+            .dropdown {
+                display: none;
+                background-color: #fff;
+                position: absolute;
+                top: 35px;
+                left: -60px;
+                width: 150px;
+                text-align: center;
+                -webkit-box-shadow: 0px 0px 9px 1px rgba(0,0,0,0.15);
+                -moz-box-shadow: 0px 0px 9px 1px rgba(0,0,0,0.15);
+                box-shadow: 0px 0px 9px 1px rgba(0,0,0,0.15);
+                z-index: 100;
+                border-radius: 5px;
+                .dropdownLink {
+                    padding: 15px;
+                }
+                .dropdownLink:hover {
+                    background-color: #f0f0f0;
+                }
+                .dropdownLink:last-child {
+                    border-top: 1px solid #e4e6e9;
+                }
+            }
+        }
+        .profile:hover {
+            .dropdown{
+                display: block;
+            }
+        }
+        
     }
 }

@@ -1,0 +1,68 @@
+.container {
+    position: relative;
+    min-height: 100vh;
+}
+
+.content {
+    padding-bottom: 100px;
+}
+
+.loaderContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+    background-color: #f8efd4;
+}
+  
+.h2 {
+    font-family: 微軟正黑體;
+    text-align: center;
+    margin-top: 0;
+    color: #ffa5a5;
+}
+  
+  
+.loader {
+    margin: auto;
+    margin-top: 300px;
+    margin-bottom: 1em;
+    width: 20em;
+    height: 1em;
+    background: transparent;
+    background-position: -10px 0;
+    border: solid 1px #555555;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.loader:before {
+    content: '';
+    width: 200%;
+    height: 100%;
+    position: absolute;
+    animation: loader 2s ease-out infinite;
+    background: linear-gradient(to right, #ffa5a5 0%,#ffa5a5 50%,#eeeeee 50%,#eeeeee 100%);
+}
+  
+  
+  
+  
+@keyframes loader {
+    0% {
+        left: -100%
+    }
+    75% {
+        left: -10%
+    }
+    85% {
+        left: -5%
+    } 
+    95% {
+        left: 0
+    }
+    
+}

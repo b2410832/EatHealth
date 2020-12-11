@@ -3,6 +3,7 @@
     width: 800px;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 60px;
     padding: 20px;
     .text {
         font-weight: bold;
@@ -80,7 +81,7 @@
         color: #ffffff;
         width: 200px;
         height: 50px;
-        border-radius: 30px;
+        border-radius: 5px;
         outline: none;
         cursor: pointer;
         font-size: 16px;
@@ -96,7 +97,7 @@
         color: #85bf3e;
         width: 200px;
         height: 50px;
-        border-radius: 30px;
+        border-radius: 5px;
         border: 1px solid #85bf3e;
         outline: none;
         cursor: pointer;
