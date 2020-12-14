@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/EatHealth/static/css/main.5040690c.chunk.css",
-    "main.js": "/EatHealth/static/js/main.ed6519b4.chunk.js",
-    "main.js.map": "/EatHealth/static/js/main.ed6519b4.chunk.js.map",
+    "main.js": "/EatHealth/static/js/main.2a65169a.chunk.js",
+    "main.js.map": "/EatHealth/static/js/main.2a65169a.chunk.js.map",
     "runtime-main.js": "/EatHealth/static/js/runtime-main.a2c04e14.js",
     "runtime-main.js.map": "/EatHealth/static/js/runtime-main.a2c04e14.js.map",
     "static/js/2.4d013731.chunk.js": "/EatHealth/static/js/2.4d013731.chunk.js",
@@ -23,6 +23,6 @@
     "static/js/runtime-main.a2c04e14.js",
     "static/js/2.4d013731.chunk.js",
     "static/css/main.5040690c.chunk.css",
-    "static/js/main.ed6519b4.chunk.js"
+    "static/js/main.2a65169a.chunk.js"
   ]
 }
