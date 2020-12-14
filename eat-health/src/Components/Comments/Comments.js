@@ -15,23 +15,6 @@ const Comments = ({ user }) => {
     const { recipeId } = useParams();
 
     useEffect(() => {
-        // let comments = [...commentsList];
-        // db.collection("recipes").doc(recipeId).collection("comments").get()
-        //     .then(docs => {
-        //         docs.forEach(doc => {
-        //             let { writerId, writerDisplayName, writerPhotoURL, content, createdTime, commentId} = doc.data();
-        //             comments.push({
-        //                 writerId,
-        //                 writerDisplayName,
-        //                 writerPhotoURL,
-        //                 content,
-        //                 createdTime,
-        //                 commentId,
-        //                 isEditing: false,
-        //             })
-        //         })
-        //         setCommentsList(comments);
-        //     })
         db.collection("recipes").doc(recipeId).collection("comments")
         .orderBy("createdTime", "desc")
         .onSnapshot(snapshot => {

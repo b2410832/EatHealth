@@ -10,6 +10,7 @@ import tipsBulb from '../../images/tips-bulb.svg';
 import { db } from '../../firebase';
 import Chart from "../Chart/Chart";
 import Comments from "../Comments/Comments";
+import firebase from "firebase/app";
 
 
 const Recipe = ({ user }) => {
@@ -28,58 +29,53 @@ const Recipe = ({ user }) => {
     const [ isLiked, setIsLiked ] = useState(false);
 
     useEffect(() => {
-        db.collection("recipes").doc(recipeId).get().then(doc => {
+        db.collection("recipes").doc(recipeId).onSnapshot((doc) => {
             if(doc.exists) {
                 let recipe = doc.data();
                 setRecipe(recipe);
+                // count recipe's nutritional facts
+                let calories = Math.round(recipe.ingredients.reduce((totalCalorie, item) => {
+                    return (item.calorie * (item.qty/100)) + totalCalorie;   
+                }, 0))
+                let carbsQty = Math.round(recipe.ingredients.reduce((totalCarbs, item) => {
+                    return (item.carb * (item.qty/100)) + totalCarbs;
+                }, 0))
+                let proteinQty = Math.round(recipe.ingredients.reduce((totalProteins, item) => {
+                    return item.protein * (item.qty/100) + totalProteins;
+                }, 0))
+                let fatQty = Math.round(recipe.ingredients.reduce((totalFats, item) => {
+                    return item.fat * (item.qty/100) + totalFats;
+                }, 0))
+                let proteinPercentage = Math.round((proteinQty * 4)/calories * 100);
+                let fatPercentage = Math.round((fatQty * 9)/calories * 100);
+                let carbsPercentage = 100 - (proteinPercentage + fatPercentage);
+                setNutrition({ calories, carbsQty, proteinQty, fatQty, proteinPercentage, fatPercentage, carbsPercentage});
             } else {
                 console.log("doc not exist");
             }
         });
+        // 使用者是否按過這個食譜讚
+        if(user) {
+            db.collection("users").doc(user.uid).collection("liked")
+            .onSnapshot(snapshot => {
+                snapshot.docs.forEach(doc  => {
+                    if(doc.id === recipeId){
+                        setIsLiked(true);
+                    }
+                });
+            })
+        }
     }, []);
 
-    useEffect(() => {
-        if(Object.keys(recipe).length > 0) {
-            // count total calories
-            let calories = Math.round(recipe.ingredients.reduce((totalCalorie, item) => {
-                return (item.calorie * (item.qty/100)) + totalCalorie;   
-            }, 0))
-            // count carbs qty
-            let carbsQty = Math.round(recipe.ingredients.reduce((totalCarbs, item) => {
-                return (item.carb * (item.qty/100)) + totalCarbs;
-            }, 0))
-            // count protein qty
-            let proteinQty = Math.round(recipe.ingredients.reduce((totalProteins, item) => {
-                return item.protein * (item.qty/100) + totalProteins;
-            }, 0))
-            // count fat qty
-            let fatQty = Math.round(recipe.ingredients.reduce((totalFats, item) => {
-                return item.fat * (item.qty/100) + totalFats;
-            }, 0))
-            // count protein percentage
-            let proteinPercentage = Math.round((proteinQty * 4)/calories * 100);
-            // count fats percentage
-            let fatPercentage = Math.round((fatQty * 9)/calories * 100);
-            // count carbs percentage
-            let carbsPercentage = 100 - (proteinPercentage + fatPercentage);
-            
-            setNutrition({ calories, carbsQty, proteinQty, fatQty, proteinPercentage, fatPercentage, carbsPercentage});
-        }
-    },[recipe]);
 
     const toggleLiked = () => {
         if(user) {
             setIsLiked(!isLiked);
             db.collection("users").doc(user.uid).collection("liked").doc(recipeId).get()
                 .then(doc => {
-                    console.log(doc.data());
-                    if(doc.data()) {
-                        db.collection("users").doc(user.uid).collection("liked").doc(recipeId).delete();
-                    } else {
-                        db.collection("users").doc(user.uid).collection("liked").doc(recipeId).set({recipeId:recipeId})
-                        .then(console.log("成功寫入"))
-                        .catch(err => console.log(err))
-                    }
+                    doc.data() ?
+                    db.collection("users").doc(user.uid).collection("liked").doc(recipeId).delete()
+                    : db.collection("users").doc(user.uid).collection("liked").doc(recipeId).set({recipeId:recipeId})
                 })
                 .catch(err => console.log(err))
         } else {
@@ -114,11 +110,11 @@ const Recipe = ({ user }) => {
                         <div className={styles.likeComment}>
                             <div>
                                 <FontAwesomeIcon icon={faHeart} style={{color:"#8a949f"}}/>
-                                <span>0 個讚</span>
+                            <span>{recipe.liked} 個讚</span>
                             </div>
                             <div>
                                 <FontAwesomeIcon icon={faCommentAlt} style={{color:"#8a949f"}}/>
-                                <span>0 則留言</span>
+                                <span>{recipe.comments} 則留言</span>
                             </div>
                         </div>
                         <div className={styles.summary}>{recipe.summary}</div>

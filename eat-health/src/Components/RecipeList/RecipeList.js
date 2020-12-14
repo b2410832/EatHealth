@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faCommentAlt } from '@fortawesome/free-regular-svg-icons'
 import { BrowserRouter as Router, Switch, Route, Link, useHistory, useRouteMatch, useParams, NavLink } from "react-router-dom";
 
+import RecipeListItem from "../RecipeListItem/RecipeListItem"
 import styles from './RecipeList.module.scss';
 import { db } from '../../firebase';
 
@@ -18,25 +19,48 @@ const RecipeList = () => {
 
 
     useEffect(() => {
-        db.collection("recipes").get().then(docs => {
-            let newRecipeList = [...recipeList];
+        db.collection("recipes").get()
+        .then(docs => {
+            let newRecipeList = [];
             docs.forEach(doc => {
-                const recipe = doc.data(); //物件
-                newRecipeList.push({
-                    id: recipe.id,
-                    image: recipe.image,
-                    title: recipe.title,
-                    authorName: recipe.authorName,
-                    authorId: recipe.authorId,
-                    authorPhotoURL: recipe.authorPhotoURL,
-                    category: recipe.category,
-                    mealTime: recipe.mealTime,
-                })
+                const recipe = doc.data(); 
+                newRecipeList = [
+                    ...newRecipeList,
+                    {
+                        id: recipe.id,
+                        image: recipe.image,
+                        title: recipe.title,
+                        authorName: recipe.authorName,
+                        authorId: recipe.authorId,
+                        authorPhotoURL: recipe.authorPhotoURL,
+                        category: recipe.category,
+                        mealTime: recipe.mealTime,
+                        liked: 0,
+                    }
+                ]
+                // 取得此食譜的讚數
+                // db.collectionGroup("liked").where("recipeId", "==", recipe.id).get()
+                // .then(snapshots => snapshots.forEach(snapshot => {
+                //     // newRecipeList.forEach(item => {
+                //     //     if(item.id === recipe.id){
+                //     //         item.liked++;
+                //     //     }
+                //     // })
+                    
+                //     setRecipeList(newRecipeList.map(item => {
+                //         console.log(item.id, recipe.id);
+                //         if(item.id === recipe.id) {
+                //             return ({ ...item, liked:item.liked++})
+                //         }
+                //         return item;
+                //     }))
+                // }))
             })
             setRecipeList(newRecipeList);
         })
     }, []);
 
+    // console.log(JSON.stringify(recipeList));
     return(
         <div className={styles.recipeList}>
             {
@@ -71,30 +95,9 @@ const RecipeList = () => {
                     }
                     return true;
                 })
-                .map(recipe => {
+                .map((recipe) => {
                     return (
-                        <Link to={`/recipes/${recipe.id}`} key={recipe.id}>
-                            <div className={styles.recipe}>
-                                <div className={styles.image}>
-                                    <img src={recipe.image} alt="食譜照片"></img>
-                                </div>
-                                <div className={styles.content}>
-                                    <div className={styles.title}>{recipe.title}</div>
-                                    <div className={styles.author}>By {recipe.authorName}</div>
-                                    <div><small>{recipe.category}</small> <small>{recipe.mealTime}</small></div>
-                                    <div className={styles.likeComment}>
-                                        <div>
-                                            <FontAwesomeIcon icon={faHeart} style={{color:"#8a949f"}}/>
-                                            <span className={styles.text}>0 個讚</span>
-                                        </div>
-                                        <div>
-                                            <FontAwesomeIcon icon={faCommentAlt} style={{color:"#8a949f"}}/>
-                                            <span className={styles.text}>0 則留言</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </Link>
+                        <RecipeListItem recipe={recipe} key={recipe.id}/>
                     )
                 })
             }
