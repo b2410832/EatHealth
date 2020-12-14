@@ -1,23 +1,28 @@
 {
   "files": {
-    "main.css": "/EatHealth/static/css/main.8c8b27cf.chunk.css",
-    "main.js": "/EatHealth/static/js/main.6e15cf75.chunk.js",
-    "main.js.map": "/EatHealth/static/js/main.6e15cf75.chunk.js.map",
-    "runtime-main.js": "/EatHealth/static/js/runtime-main.559e04a3.js",
-    "runtime-main.js.map": "/EatHealth/static/js/runtime-main.559e04a3.js.map",
-    "static/js/2.32656a2e.chunk.js": "/EatHealth/static/js/2.32656a2e.chunk.js",
-    "static/js/2.32656a2e.chunk.js.map": "/EatHealth/static/js/2.32656a2e.chunk.js.map",
-    "static/js/3.a9858ec1.chunk.js": "/EatHealth/static/js/3.a9858ec1.chunk.js",
-    "static/js/3.a9858ec1.chunk.js.map": "/EatHealth/static/js/3.a9858ec1.chunk.js.map",
+    "main.css": "/EatHealth/static/css/main.5040690c.chunk.css",
+    "main.js": "/EatHealth/static/js/main.ed6519b4.chunk.js",
+    "main.js.map": "/EatHealth/static/js/main.ed6519b4.chunk.js.map",
+    "runtime-main.js": "/EatHealth/static/js/runtime-main.a2c04e14.js",
+    "runtime-main.js.map": "/EatHealth/static/js/runtime-main.a2c04e14.js.map",
+    "static/js/2.4d013731.chunk.js": "/EatHealth/static/js/2.4d013731.chunk.js",
+    "static/js/2.4d013731.chunk.js.map": "/EatHealth/static/js/2.4d013731.chunk.js.map",
+    "static/js/3.92044233.chunk.js": "/EatHealth/static/js/3.92044233.chunk.js",
+    "static/js/3.92044233.chunk.js.map": "/EatHealth/static/js/3.92044233.chunk.js.map",
     "index.html": "/EatHealth/index.html",
-    "static/css/main.8c8b27cf.chunk.css.map": "/EatHealth/static/css/main.8c8b27cf.chunk.css.map",
-    "static/js/2.32656a2e.chunk.js.LICENSE.txt": "/EatHealth/static/js/2.32656a2e.chunk.js.LICENSE.txt",
-    "static/media/logo.6ce24c58.svg": "/EatHealth/static/media/logo.6ce24c58.svg"
+    "static/css/main.5040690c.chunk.css.map": "/EatHealth/static/css/main.5040690c.chunk.css.map",
+    "static/js/2.4d013731.chunk.js.LICENSE.txt": "/EatHealth/static/js/2.4d013731.chunk.js.LICENSE.txt",
+    "static/media/avatar-default.10c42590.png": "/EatHealth/static/media/avatar-default.10c42590.png",
+    "static/media/LogIn.module.scss": "/EatHealth/static/media/login.2db1684c.jpg",
+    "static/media/rolling.bd95c8f1.gif": "/EatHealth/static/media/rolling.bd95c8f1.gif",
+    "static/media/SignUp.module.scss": "/EatHealth/static/media/signup.8f1a1ba9.jpeg",
+    "static/media/tips-bulb.d8fc65e7.svg": "/EatHealth/static/media/tips-bulb.d8fc65e7.svg",
+    "static/media/upload.91bc9cb5.png": "/EatHealth/static/media/upload.91bc9cb5.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.559e04a3.js",
-    "static/js/2.32656a2e.chunk.js",
-    "static/css/main.8c8b27cf.chunk.css",
-    "static/js/main.6e15cf75.chunk.js"
+    "static/js/runtime-main.a2c04e14.js",
+    "static/js/2.4d013731.chunk.js",
+    "static/css/main.5040690c.chunk.css",
+    "static/js/main.ed6519b4.chunk.js"
   ]
 }
