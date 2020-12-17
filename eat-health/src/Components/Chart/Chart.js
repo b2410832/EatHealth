@@ -15,9 +15,8 @@ const Chart = ({color, percentage}) => {
             labelPosition={0}
             rounded
             animate
-            // radius={30}
             center={[75, 75]}
-            animationDuration={5000}
+            animationDuration={2000}
             label={({ dataEntry }) => Math.round(dataEntry.value) + '%'}
             labelStyle={{fontWeight:"bold", fontSize:"14px"}}
       />

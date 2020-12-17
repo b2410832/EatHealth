@@ -40,6 +40,7 @@ const App = () => {
         <div className={styles.container}>
           <div className={styles.content}>
             <Header user={user}/>
+            <div className={styles.margin}></div>
             <Switch>
               <Route exact path="/" component={Home} />
               <PrivateRoute path="/writeRecipe" component={WriteRecipe} user={user} />

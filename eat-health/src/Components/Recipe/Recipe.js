@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Switch, Route, Link, useHistory, useRouteMatch
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faCommentAlt, faBookmark } from '@fortawesome/free-regular-svg-icons';
-import { faHeart as faFullHeart } from '@fortawesome/free-solid-svg-icons'
+import { faHeart as faFullHeart, faBookmark as faFullBookmark, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 
 import styles from './Recipe.module.scss';
@@ -17,23 +17,19 @@ const Recipe = ({ user }) => {
     let { recipeId } = useParams();
 
     const [ recipe, setRecipe ] = useState({});
-    const [ nutrition, setNutrition ] = useState({
-        calories:0, 
-        carbsQty:0, 
-        proteinQty:0,
-        fatQty:0,
-        proteinPercentage:100,
-        fatPercentage:100,
-        carbsPercentage:100,
-    });
+    const [ nutrition, setNutrition ] = useState({ calories:0, carbsQty:0, proteinQty:0, fatQty:0, proteinPercentage:100, fatPercentage:100, carbsPercentage:100});
     const [ isLiked, setIsLiked ] = useState(false);
+    const [ isAdded, setIsAdded ] = useState(false);
+    const [ isFollowing, setIsfollowing ] = useState(false);
+    const [ authorFans, setAuthorFans ] = useState(0);
 
     useEffect(() => {
+        // 更新食譜資料
         db.collection("recipes").doc(recipeId).onSnapshot((doc) => {
             if(doc.exists) {
                 let recipe = doc.data();
                 setRecipe(recipe);
-                // count recipe's nutritional facts
+                // 計算食譜熱量和營養素
                 let calories = Math.round(recipe.ingredients.reduce((totalCalorie, item) => {
                     return (item.calorie * (item.qty/100)) + totalCalorie;   
                 }, 0))
@@ -50,11 +46,15 @@ const Recipe = ({ user }) => {
                 let fatPercentage = Math.round((fatQty * 9)/calories * 100);
                 let carbsPercentage = 100 - (proteinPercentage + fatPercentage);
                 setNutrition({ calories, carbsQty, proteinQty, fatQty, proteinPercentage, fatPercentage, carbsPercentage});
+                // 取得食譜作者的粉絲數
+                db.collection("users").doc(recipe.authorId).collection("fans").onSnapshot(snapshots => {
+                    setAuthorFans(snapshots.size);
+                })
             } else {
                 console.log("doc not exist");
             }
         });
-        // 使用者是否按過這個食譜讚
+        // 此使用者是否按過這個食譜讚&收藏過&追蹤此作者
         if(user) {
             db.collection("users").doc(user.uid).collection("liked")
             .onSnapshot(snapshot => {
@@ -64,8 +64,24 @@ const Recipe = ({ user }) => {
                     }
                 });
             })
+            db.collection("users").doc(user.uid).collection("favorites")
+            .onSnapshot(snapshot => {
+                snapshot.docs.forEach(doc  => {
+                    if(doc.id === recipeId){
+                        setIsAdded(true);
+                    }
+                });
+            })
+            db.collection("users").doc(user.uid).collection("followings")
+            .onSnapshot(snapshot => {
+                snapshot.docs.forEach(doc  => {
+                    if(doc.id === recipe.authorId){
+                        setIsfollowing(true);
+                    }
+                });
+            })
         }
-    }, []);
+    }, [recipe.authorId]);
 
 
     const toggleLiked = () => {
@@ -73,13 +89,47 @@ const Recipe = ({ user }) => {
             setIsLiked(!isLiked);
             db.collection("users").doc(user.uid).collection("liked").doc(recipeId).get()
                 .then(doc => {
-                    doc.data() ?
-                    db.collection("users").doc(user.uid).collection("liked").doc(recipeId).delete()
+                    doc.data() 
+                    ? db.collection("users").doc(user.uid).collection("liked").doc(recipeId).delete()
                     : db.collection("users").doc(user.uid).collection("liked").doc(recipeId).set({recipeId:recipeId})
                 })
                 .catch(err => console.log(err))
         } else {
             alert("請先登入才能按讚哦！");
+        }
+    }
+
+    const toggleAdded = () => {
+        if(user) {
+            setIsAdded(!isAdded);
+            db.collection("users").doc(user.uid).collection("favorites").doc(recipeId).get()
+                .then(doc => {
+                    doc.data() 
+                    ? db.collection("users").doc(user.uid).collection("favorites").doc(recipeId).delete()
+                    : db.collection("users").doc(user.uid).collection("favorites").doc(recipeId).set({recipeId:recipeId})
+                })
+                .catch(err => console.log(err))
+        } else {
+            alert("請先登入才能收藏食譜哦！");
+        }
+    }
+
+    const toggleFollowing = () => {
+        if(user) {
+            setIsfollowing(!isFollowing);
+            db.collection("users").doc(user.uid).collection("followings").doc(recipe.authorId).get()
+                .then(doc => {
+                    doc.data() 
+                    ? db.collection("users").doc(user.uid).collection("followings").doc(recipe.authorId).delete().then(() => (
+                        db.collection("users").doc(recipe.authorId).collection("fans").doc(user.uid).delete()
+                    ))
+                    : db.collection("users").doc(user.uid).collection("followings").doc(recipe.authorId).set({followingId: recipe.authorId}).then(() => (
+                        db.collection("users").doc(recipe.authorId).collection("fans").doc(user.uid).set({fanId: user.uid})
+                    ))
+                })
+                .catch(err => console.log(err))
+        } else {
+            alert("請先登入才能追蹤此人哦！");
         }
     }
 
@@ -97,14 +147,24 @@ const Recipe = ({ user }) => {
                     </div>
                     <div className={styles.about}>
                         <div className={styles.author}>
-                            <div className={styles.profile}>
-                                <img src={recipe.authorPhotoURL} alt=""></img>
-                            </div>
+                            <Link to={`/profile/${recipe.authorId}/myRecipes`}>
+                                <div className={styles.profile}>
+                                    <img src={recipe.authorPhotoURL} alt=""></img>
+                                </div>
+                            </Link>
                             <div>
-                                <div className={styles.name}>{recipe.authorName}</div>
-                                <div>0 個粉絲</div>
+                                <Link to={`/profile/${recipe.authorId}/myRecipes`}>
+                                    <div className={styles.name}>{recipe.authorName}</div>
+                                </Link>
+                                <div>{authorFans} 個粉絲</div>
                             </div>
-                            <button className={styles.darkBtn}>追蹤</button>
+                            {
+                                user.uid !== recipe.authorId && 
+                                ( isFollowing 
+                                    ? <button className={styles.greyBtn} onClick={toggleFollowing}><FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>&nbsp;已追蹤</button>
+                                    : <button className={styles.darkBtn} onClick={toggleFollowing}>追蹤</button>
+                                )
+                            }
                         </div>
                         
                         <div className={styles.likeComment}>
@@ -130,8 +190,16 @@ const Recipe = ({ user }) => {
                                     </button>
                                 }
                             </div>
-                            <div className={styles.btn}>
-                                <button className={styles.lineBtn}><FontAwesomeIcon icon={faBookmark} style={{color:"#888888", marginRight:"5px"}}/>收藏</button>
+                            <div className={styles.btn} onClick={toggleAdded}>
+                                {
+                                    isAdded ? 
+                                    <button className={styles.lineBtn}>
+                                        <FontAwesomeIcon icon={faFullBookmark} style={{color:"#3f3d56", marginRight:"5px"}}/>已收藏
+                                    </button>
+                                    : <button className={styles.lineBtn}>
+                                        <FontAwesomeIcon icon={faBookmark} style={{color:"#888888", marginRight:"5px"}}/>收藏
+                                    </button>
+                                }
                             </div>
                         </div>
                     </div>
@@ -182,7 +250,7 @@ const Recipe = ({ user }) => {
                 </div>
                 <div>
                     <div className={styles.texts}>步驟</div>
-                    <div className={styles.steps}>
+                    {/* <div className={styles.steps}>
                         <div className={styles.stepNumber}>1.</div>
                         <pre>{recipe.step1}</pre>
                     </div>
@@ -197,7 +265,18 @@ const Recipe = ({ user }) => {
                     <div className={styles.steps}>
                         <div className={styles.stepNumber}>4.</div>
                         <pre>{recipe.step4}</pre>
-                    </div>
+                    </div> */}
+                    {   recipe.steps ?
+                        recipe.steps.map((step,index) => {
+                            return(
+                                <div className={styles.steps}>
+                                    <div className={styles.stepNumber}>{index+1}.</div>
+                                    <pre>{step.text}</pre>
+                                </div>
+                            )
+                        })
+                        : null
+                    }
                 </div>
                 <div className={styles.tips}>
                     <img src={tipsBulb} alt="小叮嚀" style={{width: "30px"}}/>

@@ -1,16 +1,15 @@
 .container {
     background-color: #ffffff;
     border: 1px solid #e4e6e9;
-    margin-left: auto;
-    margin-right: auto;
-    width: 90%;
+    margin: -65px auto 0 auto;
+    width: 70%;
     min-height: 500px;
     padding: 20px;
     .user {
         display: flex;
         align-items: center;
         padding-bottom: 20px;
-        border-bottom: 1px solid #e4e6e9;
+        // border-bottom: 1px solid #e4e6e9;
         .photo {
             width: 103px;
             background-color: #e4e6e9;
@@ -31,32 +30,85 @@
                 width: 100%;
             }
         }
-        .name {
-            font-size: 24px;
-            font-weight: bold;
+        .info {
             margin-left: 20px;
+            // width: 20%;
+            .name {
+                font-size: 24px;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+        }
+        
+        .datas {
+            width: 40%;
+            display: flex;
+            text-align: center;
+            justify-content: space-around;
+            font-size: 18px;
+            .number {
+                font-weight: bold;
+                font-size: 1.2em;
+            }
         }
     }
     .profile {
-        display: flex;
-        margin-top: 20px;
+        // display: flex;
+        // margin-top: 20px;
+        
         .navbar {
             list-style: none;
-            padding: 0 20px 0 20px;
+            padding: 0;
             margin: 0;
-            width: 150px;
+            // width: 20%;
+            display: flex;
             li {
-                padding: 10px 0;
+                padding: 10px 40px;
                 margin: 20px 0;
                 font-size: 18px;
                 letter-spacing: 1px;
+                position: relative;
             }
         }
         .activeLink {
             font-weight: bold;
+            color: #85bf3e;
+            position: relative;
+        }
+        .activeLink::after {
+            content: "";
+            border-bottom: 4px solid #85bf3e;
+            width: 100%;
+            display: block;
+            position: absolute;
+            bottom: 0px;
         }
         .content {
-            flex:auto;
+            width: 100%;
         }
+    }
+    .darkBtn {
+        border: none;
+        background-color: #05172c;
+        color: #ffffff;
+        border-radius: 5px;
+        outline: none;
+        cursor: pointer;
+        font-size: 16px;
+        width: 80px;
+        height: 40px;
+        margin-left: 50px;
+    }
+    .greyBtn {
+        border: none;
+        background-color: #e4e6e9;
+        color: #8a949f;
+        border-radius: 5px;
+        outline: none;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100px;
+        height: 40px;
+        margin-left: 50px;
     }
 }

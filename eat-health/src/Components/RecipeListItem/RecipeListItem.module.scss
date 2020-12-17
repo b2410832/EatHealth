@@ -3,7 +3,9 @@
     padding: 20px;
     .image {
         width: 150px;
+        height: 150px;
         margin-right: 10px;
+        overflow: hidden;
         img {
             width: 100%;
         }

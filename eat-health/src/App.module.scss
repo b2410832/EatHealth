@@ -48,9 +48,7 @@
     background: linear-gradient(to right, #ffa5a5 0%,#ffa5a5 50%,#eeeeee 50%,#eeeeee 100%);
 }
   
-  
-  
-  
+
 @keyframes loader {
     0% {
         left: -100%
@@ -64,5 +62,8 @@
     95% {
         left: 0
     }
-    
+}
+
+.margin {
+    height: 165px;
 }

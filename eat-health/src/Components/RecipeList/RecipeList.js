@@ -7,26 +7,45 @@ import RecipeListItem from "../RecipeListItem/RecipeListItem"
 import styles from './RecipeList.module.scss';
 import { db } from '../../firebase';
 
-const RecipeList = () => {
+const RecipeList = ({ subProfile }) => {
     const [recipeList, setRecipeList] = useState([]);
+
     let { path, url } = useRouteMatch();
     let { userId } = useParams();
 
     let urlParams = new URLSearchParams(window.location.search);
     let category = urlParams.get("category");
     let mealTime = urlParams.get("mealTime");
-    console.log(userId, path, category, mealTime);
-
-
+    
     useEffect(() => {
-        db.collection("recipes").get()
-        .then(docs => {
-            let newRecipeList = [];
-            docs.forEach(doc => {
-                const recipe = doc.data(); 
-                newRecipeList = [
-                    ...newRecipeList,
-                    {
+        setRecipeList([]);
+        if(subProfile === "favorites") {
+            db.collection("users").doc(userId).collection("favorites").get().then(docs => {
+                let favorites = [];
+                docs.forEach(doc => {
+                    db.collection("recipes").doc(doc.id).get().then(doc => {
+                        const recipe = doc.data();
+                        favorites = [...favorites, {
+                            id: recipe.id,
+                            image: recipe.image,
+                            title: recipe.title,
+                            authorName: recipe.authorName,
+                            authorId: recipe.authorId,
+                            authorPhotoURL: recipe.authorPhotoURL,
+                            category: recipe.category,
+                            mealTime: recipe.mealTime,
+                            liked: 0,
+                        }];
+                        setRecipeList(favorites);
+                    })
+                })
+            })
+        } else {
+            db.collection("recipes").get().then(docs => {
+                let newRecipeList = [];
+                docs.forEach(doc => {
+                    const recipe = doc.data(); 
+                    newRecipeList = [...newRecipeList,{
                         id: recipe.id,
                         image: recipe.image,
                         title: recipe.title,
@@ -36,31 +55,13 @@ const RecipeList = () => {
                         category: recipe.category,
                         mealTime: recipe.mealTime,
                         liked: 0,
-                    }
-                ]
-                // 取得此食譜的讚數
-                // db.collectionGroup("liked").where("recipeId", "==", recipe.id).get()
-                // .then(snapshots => snapshots.forEach(snapshot => {
-                //     // newRecipeList.forEach(item => {
-                //     //     if(item.id === recipe.id){
-                //     //         item.liked++;
-                //     //     }
-                //     // })
-                    
-                //     setRecipeList(newRecipeList.map(item => {
-                //         console.log(item.id, recipe.id);
-                //         if(item.id === recipe.id) {
-                //             return ({ ...item, liked:item.liked++})
-                //         }
-                //         return item;
-                //     }))
-                // }))
+                    }]
+                })
+                setRecipeList(newRecipeList);
             })
-            setRecipeList(newRecipeList);
-        })
-    }, []);
+        }
+    }, [subProfile]);
 
-    // console.log(JSON.stringify(recipeList));
     return(
         <div className={styles.recipeList}>
             {
@@ -90,7 +91,7 @@ const RecipeList = () => {
                     }
                 })
                 .filter(recipe => {
-                    if(userId) {
+                    if(subProfile === "myRecipes") {
                         return recipe.authorId === userId;
                     }
                     return true;

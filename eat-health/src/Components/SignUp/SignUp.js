@@ -36,7 +36,15 @@ const SignUp = ({ setUser }) => {
                     userId: auth.currentUser.uid,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 })
-            setUser(auth.currentUser);
+                // .then(() => {
+                //     // setUser(auth.currentUser);
+                //     setUser({
+                //         displayName: displayName,
+                //         photoURL: photoURL,
+                //         email: auth.currentUser.email,
+                //         userId: auth.currentUser.uid,
+                //     })
+                // })
             setInputs({email:"", password:"", name:""});
             setIsLoading(false);
             to ? history.push(to) : history.push("/"); 

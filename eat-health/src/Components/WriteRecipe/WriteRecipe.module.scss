@@ -44,23 +44,23 @@
     .recipeType, .portion, .ingredient{
         margin-right: 20px;
     }
-    .steps {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-        padding-bottom: 10px;
-    }
-    .steps:not(:last-child) {
-        border-bottom: 1px solid hsl(0,0%,80%);
-    }
-    .stepNumber {
-        font-size: 30px;
-        font-weight: bold;
-        color: #3f3d56;
-        font-style: italic;
-        margin-right: 50px;
-        margin-left: 10px;
-    }
+    // .steps {
+    //     display: flex;
+    //     align-items: center;
+    //     margin-bottom: 10px;
+    //     padding-bottom: 10px;
+    // }
+    // .steps:not(:last-child) {
+    //     border-bottom: 1px solid hsl(0,0%,80%);
+    // }
+    // .stepNumber {
+    //     font-size: 30px;
+    //     font-weight: bold;
+    //     color: #3f3d56;
+    //     font-style: italic;
+    //     margin-right: 50px;
+    //     margin-left: 10px;
+    // }
     .tips {
         background-color: #fff5da;
         padding: 10px;

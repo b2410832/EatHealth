@@ -1,0 +1,71 @@
+.followListContainer {
+    border: 1px solid #e4e6e9;
+    padding: 20px;
+    min-height: 300px;
+    .follow {
+        display: flex;
+        align-items: center;
+        .user {
+            display: flex;
+
+            .image {
+                width: 60px;
+                height: 60px;
+                margin-right: 10px;
+                img {
+                    width: 100%;
+                    clip-path: circle(50%);
+                }
+            }
+            .info {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                .name {
+                    font-weight: bold;
+                    font-size: 18px;
+                }
+                .details {
+                    display: flex;
+                    color: #808080;
+                    .fans {
+                        margin-right: 10px;
+                    }
+                    .recipes {
+
+                    }
+                }
+            }
+        }
+        .followBtn {
+            margin-left: auto;
+        }
+    }
+    .follow:not(:last-child) {
+        margin-bottom: 20px;
+    }
+    .greyBtn {
+        border: none;
+        background-color: #e4e6e9;
+        color: #8a949f;
+        border-radius: 5px;
+        outline: none;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100px;
+        height: 40px;
+        margin-left: auto;
+    }
+    .darkBtn {
+        border: none;
+        background-color: #05172c;
+        color: #ffffff;
+        border-radius: 5px;
+        outline: none;
+        cursor: pointer;
+        font-size: 16px;
+        width: 80px;
+        height: 40px;
+        margin-left: auto;
+    }
+}

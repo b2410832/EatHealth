@@ -1,15 +1,16 @@
-import { useState } from 'react';
+import { useState } from "react";
 import firebase from "firebase/app";
-import { db, storage } from '../../firebase';
-import Select from 'react-select';
+import { db, storage } from "../../firebase";
+import Select from "react-select";
 import { useHistory } from "react-router-dom";
 
-import UploadImage from '../UploadImage/UploadImage';
-import Ingredients from '../Ingredients/Ingredients';
-import styles from './WriteRecipe.module.scss';
-import foodDatabase from '../../foodDatabase.json';
-import tipsBulb from '../../images/tips-bulb.svg';
-import defaultImg from '../../images/upload.png'
+import UploadImage from "../UploadImage/UploadImage";
+import Ingredients from "../Ingredients/Ingredients";
+import Steps from "../Steps/Steps";
+import styles from "./WriteRecipe.module.scss";
+import foodDatabase from "../../foodDatabase.json";
+import tipsBulb from "../../images/tips-bulb.svg";
+import defaultImg from "../../images/upload.png"
 
 
 
@@ -23,13 +24,13 @@ const cookTime = [{ value: 0, label: "5", name: "cookTime"}, { value: 1, label: 
 
 const WriteRecipe = ({user}) => {
   let history = useHistory();
-  console.log(user);
 
-  const [inputs, setInputs] = useState({ title: "", category: "", mealTime: "", summary: "", portion: "",cookTime: "",step1: "",step2: "",step3: "",step4: "",tips: ""});
-  const [ingredients, setIngredients] = useState([{uid: `${new Date().getTime()}-1`, value:"", label:"", id:"",type:"", name:"",calorie:0, carb:0, protein:0, fat:0, qty:""}, {uid: `${new Date().getTime()}-2`, value:"", label:"", id:"",type:"", name:"",calorie:0, carb:0, protein:0, fat:0, qty:""}]);
-  const [file, setFile] = useState(null);
-  const [url, setUrl] = useState(defaultImg);
-  const [isLoading, setIsLoading] = useState(false);
+  const [ inputs, setInputs ] = useState({ title: "", category: "", mealTime: "", summary: "", portion: "",cookTime: "",step1: "",step2: "",step3: "",step4: "",tips: ""});
+  const [ ingredients, setIngredients ] = useState([{uid: `${new Date().getTime()}-1`, value:"", label:"", id:"",type:"", name:"",calorie:0, carb:0, protein:0, fat:0, qty:""}, {uid: `${new Date().getTime()}-2`, value:"", label:"", id:"",type:"", name:"",calorie:0, carb:0, protein:0, fat:0, qty:""}]);
+  const [ steps, setSteps ] = useState([{uid: `${new Date().getTime()}-1`, text:"", image: ""}, {uid: `${new Date().getTime()}-2`, text:"", image: ""}, {uid: `${new Date().getTime()}-3`, text:"", image: ""}, {uid: `${new Date().getTime()}-4`, text:"", image: ""},])
+  const [ file, setFile ] = useState(null);
+  const [ url, setUrl ] = useState(defaultImg);
+  const [ isLoading, setIsLoading ] = useState(false);
 
   const handleInputChange = (e) => {
     setInputs({...inputs, [e.target.name]: e.target.value});
@@ -92,10 +93,7 @@ const WriteRecipe = ({user}) => {
                 summary: inputs.summary,
                 portion: inputs.portion,
                 cookTime: inputs.cookTime,
-                step1: inputs.step1, 
-                step2: inputs.step2, 
-                step3: inputs.step3,
-                step4: inputs.step4,
+                steps,
                 tips: inputs.tips,
                 id: recipe.id,
                 image: url,
@@ -153,25 +151,10 @@ const WriteRecipe = ({user}) => {
         addIngredient={addIngredient}
         deleteIngredient={deleteIngredient}
       />
-      <div>
-        <div className={styles.text}>步驟</div>
-        <div className={styles.steps}>
-          <div className={styles.stepNumber}>1.</div>
-          <textarea placeholder="請輸入步驟說明" name="step1" onChange={handleInputChange} value={inputs.step1}></textarea>
-        </div>
-        <div className={styles.steps}>
-          <div className={styles.stepNumber}>2.</div>
-          <textarea placeholder="請輸入步驟說明" name="step2" onChange={handleInputChange} value={inputs.step2}></textarea>
-        </div>
-        <div className={styles.steps}>
-          <div className={styles.stepNumber}>3.</div>
-          <textarea placeholder="請輸入步驟說明" name="step3" onChange={handleInputChange} value={inputs.step3}></textarea>
-        </div>
-        <div className={styles.steps}>
-          <div className={styles.stepNumber}>4.</div>
-          <textarea placeholder="請輸入步驟說明" name="step4" onChange={handleInputChange} value={inputs.step4}></textarea>
-        </div>
-      </div>
+      <Steps 
+        steps={steps}
+        setSteps={setSteps}
+      />
       <div className={styles.tips}>
         <img src={tipsBulb} alt="小叮嚀" style={{width: "30px"}}/>
         <span className={styles.text}><mark>小叮嚀</mark></span>
