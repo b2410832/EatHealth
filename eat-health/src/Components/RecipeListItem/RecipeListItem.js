@@ -14,14 +14,6 @@ const RecipeListItem = ({ recipe }) => {
         let comments = 0;
         // 取得此食譜的讚數
         db.collectionGroup("liked").where("recipeId", "==", recipe.id).onSnapshot((snapshots) => {
-            // let liked = 0;
-            // snapshots.forEach(snapshot => {
-            //     if(snapshot) {
-            //         liked++;
-            //     }
-            // })
-
-            // setRecipeData({...recipeData, liked:snapshots.docs.length})
             liked = snapshots.docs.length;
             db.collection("recipes").doc(recipe.id).update({liked: snapshots.docs.length});
 

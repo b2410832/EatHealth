@@ -49,8 +49,8 @@ const Home = () => {
                         {
                             latest.map((recipe, index) => {
                                 return(
-                                    <div className={styles.recipe}>
-                                        <Link to={`/recipes/${recipe.id}`} key={recipe.id}>
+                                    <div className={styles.recipe} key={recipe.id}>
+                                        <Link to={`/recipes/${recipe.id}`}>
                                             <div className={styles.image}>
                                                 <img src={recipe.image} alt=""></img>
                                             </div>

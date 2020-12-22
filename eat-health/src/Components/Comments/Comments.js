@@ -24,7 +24,7 @@ const Comments = ({ user }) => {
             }))
             setCommentsList(data);
         })
-    }, []);
+    }, [recipeId]);
 
     const handleInputChange = (e) => {
         setInput(e.target.value);

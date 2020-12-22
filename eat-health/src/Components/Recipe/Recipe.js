@@ -28,6 +28,11 @@ const Recipe = ({ user }) => {
 
 
     useEffect(() => {
+        setNutrition({ calories:0, carbsQty:0, proteinQty:0, fatQty:0, proteinPercentage:100, fatPercentage:100, carbsPercentage:100});
+        setIsLiked(false);
+        setIsAdded(false);
+        setIsfollowing(false);
+        setIsMyself(false);
         // 更新食譜資料
         db.collection("recipes").doc(recipeId).onSnapshot((doc) => {
             if(doc.exists) {
@@ -54,45 +59,92 @@ const Recipe = ({ user }) => {
                 db.collection("users").doc(recipe.authorId).collection("fans").onSnapshot(snapshots => {
                     setAuthorFans(snapshots.size);
                 })
+                // 取得此食譜的讚數 //
+                db.collectionGroup("liked").where("recipeId", "==", recipe.id).onSnapshot((snapshots) => {
+                    db.collection("recipes").doc(recipe.id).update({liked: snapshots.docs.length});
+
+                })
+                // 取得此食譜的留言數 // 
+                db.collection("recipes").doc(recipe.id).collection("comments").onSnapshot((snapshots => {
+                    db.collection("recipes").doc(recipe.id).update({comments: snapshots.docs.length});
+                }))
+                // 此使用者是否按過這個食譜讚&收藏過&追蹤此作者
+                if(user) {
+                    db.collection("users").doc(user.uid).collection("liked")
+                    .onSnapshot(snapshot => {
+                        setIsLiked(false);//
+                        snapshot.docs.forEach(doc  => {
+                            if(doc.id === recipeId){
+                                return setIsLiked(true);
+                            } 
+                        });
+                    })
+                    db.collection("users").doc(user.uid).collection("favorites")
+                    .onSnapshot(snapshot => {
+                        setIsAdded(false);//
+                        snapshot.docs.forEach(doc  => {
+                            if(doc.id === recipeId){
+                                return setIsAdded(true);
+                            } 
+                        });
+                    })
+                    
+                    if(user.uid === recipe.authorId) {
+                        setIsMyself(true);
+                    } else {
+                        // setIsfollowing(false);
+                        db.collection("users").doc(user.uid).collection("followings")
+                        .onSnapshot(snapshot => {
+                            setIsfollowing(false);//
+                            snapshot.docs.forEach(doc  => {
+                                console.log(doc.id, recipe.authorId);
+                                if(doc.id === recipe.authorId){
+                                    return setIsfollowing(true);
+                                } 
+                            });
+                        })
+                        setIsMyself(false);
+                    }
+                }
             } else {
                 console.log("doc not exist");
             }
         });
-        // 此使用者是否按過這個食譜讚&收藏過&追蹤此作者
-        if(user) {
-            db.collection("users").doc(user.uid).collection("liked")
-            .onSnapshot(snapshot => {
-                snapshot.docs.forEach(doc  => {
-                    if(doc.id === recipeId){
-                        setIsLiked(true);
-                    }
-                });
-            })
-            db.collection("users").doc(user.uid).collection("favorites")
-            .onSnapshot(snapshot => {
-                snapshot.docs.forEach(doc  => {
-                    if(doc.id === recipeId){
-                        setIsAdded(true);
-                    }
-                });
-            })
+        // // 此使用者是否按過這個食譜讚&收藏過&追蹤此作者
+        // if(user) {
+        //     db.collection("users").doc(user.uid).collection("liked")
+        //     .onSnapshot(snapshot => {
+        //         snapshot.docs.forEach(doc  => {
+        //             if(doc.id === recipeId){
+        //                 setIsLiked(true);
+        //             }
+        //         });
+        //     })
+        //     db.collection("users").doc(user.uid).collection("favorites")
+        //     .onSnapshot(snapshot => {
+        //         snapshot.docs.forEach(doc  => {
+        //             if(doc.id === recipeId){
+        //                 setIsAdded(true);
+        //             }
+        //         });
+        //     })
             
-            if(user.uid === recipe.authorId) {
-                setIsMyself(true);
-            } else {
-                // setIsfollowing(false);
-                db.collection("users").doc(user.uid).collection("followings")
-                .onSnapshot(snapshot => {
-                    snapshot.docs.forEach(doc  => {
-                        console.log(doc.id, recipe.authorId);
-                        if(doc.id === recipe.authorId){
-                            setIsfollowing(true);
-                        }
-                    });
-                })
-                setIsMyself(false);
-            }
-        }
+        //     if(user.uid === recipe.authorId) {
+        //         setIsMyself(true);
+        //     } else {
+        //         // setIsfollowing(false);
+        //         db.collection("users").doc(user.uid).collection("followings")
+        //         .onSnapshot(snapshot => {
+        //             snapshot.docs.forEach(doc  => {
+        //                 console.log(doc.id, recipe.authorId);
+        //                 if(doc.id === recipe.authorId){
+        //                     setIsfollowing(true);
+        //                 }
+        //             });
+        //         })
+        //         setIsMyself(false);
+        //     }
+        // }
         // console.log("recipe.authorId:",recipe.authorId, "recipeId:",recipeId);
 
     }, [recipe.authorId, recipeId]);
@@ -100,7 +152,7 @@ const Recipe = ({ user }) => {
 
     const toggleLiked = () => {
         if(user) {
-            setIsLiked(!isLiked);
+            // setIsLiked(!isLiked);
             db.collection("users").doc(user.uid).collection("liked").doc(recipeId).get()
                 .then(doc => {
                     doc.data() 
@@ -115,7 +167,7 @@ const Recipe = ({ user }) => {
 
     const toggleAdded = () => {
         if(user) {
-            setIsAdded(!isAdded);
+            // setIsAdded(!isAdded);
             db.collection("users").doc(user.uid).collection("favorites").doc(recipeId).get()
                 .then(doc => {
                     doc.data() 
@@ -130,7 +182,7 @@ const Recipe = ({ user }) => {
 
     const toggleFollowing = () => {
         if(user) {
-            setIsfollowing(!isFollowing);
+            // setIsfollowing(!isFollowing);
             db.collection("users").doc(user.uid).collection("followings").doc(recipe.authorId).get()
                 .then(doc => {
                     doc.data() 
