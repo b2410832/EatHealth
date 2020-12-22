@@ -72,7 +72,11 @@ const Profile = ({ user }) => {
         <div className={styles.container}>
             <div className={styles.user}>
                 <div className={styles.photo} >
-                    <img src={profile.photoURL} alt="大頭照"></img>
+                    {
+                        profile ?
+                        <img src={profile.photoURL} alt="大頭照"></img>
+                        : null
+                    }
                 </div>
                 <div className={styles.info}>
                     <div className={styles.name}>

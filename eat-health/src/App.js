@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { auth } from './firebase';
+import { auth, db } from './firebase';
 
 import Header from './Components/Header/Header';
 import WriteRecipe from './Components/WriteRecipe/WriteRecipe';
@@ -17,18 +17,19 @@ import styles from "./App.module.scss";
 
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const [ user, setUser ] = useState(null);
 
   auth.onAuthStateChanged(function(user) {
     if (user) {
-      console.log("user",auth.currentUser);
-      setUser(auth.currentUser);
+        // console.log("user",auth.currentUser);
+        setUser(auth.currentUser);
+
     } else {
       setUser(false);
     }
   });
   
-  if(user===null) {
+  if(user === null) {
     return (
       <div className={styles.loaderContainer}>
         <div className={styles.loader}></div>
@@ -47,7 +48,7 @@ const App = () => {
               <Route path="/signup" render={() => <SignUp setUser={setUser} user={user}/>} />
               <Route path="/login" render={() => <LogIn setUser={setUser}/>}/>
               <Route exact path="/recipes" render={() => <Recipes />}/>
-              <Route path="/recipes/:recipeId" render={() => <Recipe user={user}/>}></Route>
+              <Route path="/recipes/:recipeId" render={({ match }) => <Recipe user={user} match={match}/>}></Route>
               <Route path="/profile/:userId" render={() => <Profile user={user}/>}></Route>
             </Switch>
           </div>

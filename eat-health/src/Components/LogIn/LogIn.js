@@ -5,7 +5,7 @@ import { auth } from '../../firebase';
 
 import styles from './LogIn.module.scss';
 
-const LogIn = ({ setUser }) => {
+const LogIn = ({ setUser, setDisplayName }) => {
     let history = useHistory();
     let urlParams = new URLSearchParams(window.location.search);
     let to = urlParams.get("to");

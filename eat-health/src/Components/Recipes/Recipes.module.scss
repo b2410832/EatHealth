@@ -1,26 +1,68 @@
+.banner {
+    width: 100%;
+    height: 200px;
+    background-color: #fdf1de;
+    background-image: url("../../images/banner-pattern-04.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    font-size: 36px;
+    font-weight: bold;
+    letter-spacing: 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    .categoryEnglish {
+        font-size: 0.8em;
+        letter-spacing: 0.5px;
+        text-shadow: 3px 3px 0px #fec740;
+    }
+}
+
+
 .container {
+    // max-width: 1200px;
+    width: 95%;
+    margin: 30px auto 0 auto;
+    .category {
+        font-size: 24px;
+        font-weight: bold;
+        margin-left: 20%;
+        margin-bottom: 20px;
+        mark {
+            display: inline-block;
+            line-height: 0em;
+            padding-bottom: 0.8em;
+            background-color: #fec740;
+        }
+    }
+    .main {
     display: flex;
     align-items: flex-start;
-    max-width: 1000px;
-    width: 95%;
-    margin-left: auto;
-    margin-right: auto;
-    .mealTime {
-        background-color: #ffffff;
-        margin-right: 20px;
-        border: 1px solid #e4e6e9;
-        color: #3f3d56;
-        font-weight: bold;
-        width: 200px;
-        a {
-            display: inline-block;
-            width: 100%;
-            height: 100%;
-            padding: 20px 40px;
-            letter-spacing: 1px;
-        }
-        a:hover, a:focus {
-            background-color: #f5f5f5;
+    flex-wrap: wrap;
+        .mealTime {
+            background-color: #ffffff;
+            margin-right: 20px;
+            border: 1px solid #e4e6e9;
+            color: #3f3d56;
+            font-weight: bold;
+            font-size: 18px;
+            width: 15%;
+            a {
+                display: inline-block;
+                width: 100%;
+                height: 100%;
+                padding: 25px 40px;
+                letter-spacing: 1px;
+            }
+            a:hover, a:focus {
+                background-color: #dddddd;
+                // background-color: #3f3d56;
+                // color: #ffffff;
+            }
         }
     }
 }

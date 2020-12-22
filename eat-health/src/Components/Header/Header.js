@@ -1,19 +1,19 @@
 import { BrowserRouter as Router, Switch, Route, Link, useHistory, NavLink } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 
+
 import styles from './Header.module.scss';
 import { auth } from '../../firebase';
-import { useEffect, useState, useRef } from "react";
+import logo from "../../images/logo-04.png";
+import defaultAvatar from "../../images/avatar-default.png";
 
 
 const Header = ({ user }) => { 
     const [isExploring, setIsExploring] = useState(false);   
     let history = useHistory();
     const div = useRef();
-
-    console.log(user);
-
 
     const logout = () => {
         auth.signOut().then(function() {
@@ -39,11 +39,15 @@ const Header = ({ user }) => {
             <div className={styles.top}>
                 <div className={styles.left}>
                     <div className={styles.logo}>
-                        <Link to="/">EatHealth</Link>
+                        <Link to="/"><img src={logo} alt=""></img></Link>
                     </div>
-                <div className={styles.explore} onMouseOver={toggleIsExploring} onMouseOut={toggleIsExploring}>找食譜 &nbsp;
-                    { isExploring ? <FontAwesomeIcon icon={faChevronDown}></FontAwesomeIcon> : <FontAwesomeIcon icon={faChevronUp}></FontAwesomeIcon>}
-                </div>
+                    { 
+                        isExploring 
+                        ? <div className={styles.explore} onMouseOver={toggleIsExploring} onMouseOut={toggleIsExploring}  style={{color: "#85bf3e"}}>找食譜 &nbsp;<FontAwesomeIcon icon={faChevronDown}></FontAwesomeIcon></div>
+
+                        : <div className={styles.explore} onMouseOver={toggleIsExploring} onMouseOut={toggleIsExploring}>找食譜 &nbsp;<FontAwesomeIcon icon={faChevronUp}></FontAwesomeIcon></div>
+
+                    }
                 </div>
                 <div className={styles.right}>
                     {/* <form className={styles.search}>
@@ -58,6 +62,7 @@ const Header = ({ user }) => {
                         user ?
                             <div style={{display: "flex"}}>
                                 <div className={styles.profile}>
+                                    {/* <img src={defaultAvatar} alt="會員"></img> */}
                                     <img src={user.photoURL} alt="會員"></img>
                                     <div>{user.displayName}</div>
                                     <div className={styles.dropdown}>
@@ -86,7 +91,7 @@ const Header = ({ user }) => {
             <div className={styles.bottom} ref={div}  onMouseOver={toggleIsExploring} onMouseOut={toggleIsExploring}>
                 <div className={styles.menu}>
                     <div className={styles.link}>
-                        <NavLink to="/recipes?category=all" activeClassName={styles.activeMenu} isActive={() => isActiveLink("all")}>所有料理</NavLink>
+                        <NavLink to="/recipes?category=all" activeClassName={styles.activeMenu} isActive={() => isActiveLink("all")}>全部料理</NavLink>
                     </div>
                     <div className={styles.link}>
                         <NavLink to="/recipes?category=balanced" activeClassName={styles.activeMenu} isActive={() => isActiveLink("balanced")}>均衡料理</NavLink>

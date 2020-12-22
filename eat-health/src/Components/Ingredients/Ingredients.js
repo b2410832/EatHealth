@@ -2,7 +2,41 @@ import styles from './Ingredients.module.scss';
 import Select from 'react-select';
 
 
-const Ingredients = ({options, handleSelectFoodChange, handleQtyChange, ingredients, addIngredient, deleteIngredient}) => {
+const Ingredients = ({options, ingredients, setIngredients}) => {
+    
+    const handleSelectFoodChange = (foods, uid) => {
+        setIngredients(ingredients.map(item => 
+          item.uid === uid ? {...item, ...foods} : item
+        ));
+    }
+    
+    const handleQtyChange = (e, uid) => {
+    setIngredients(ingredients.map(item => 
+        item.uid === uid ? {...item, qty: e.target.value} : item
+    ));
+    }
+
+    const addIngredient = () => {
+        const newIngredients = [...ingredients, {
+          uid: `${new Date().getTime()}`, 
+          value:"", label:"", 
+          id:"",
+          type:"", 
+          name:"",
+          calorie:0, 
+          carb:0, 
+          protein:0, 
+          fat:0, 
+          qty:"",
+        }]
+        setIngredients(newIngredients);
+      }
+    
+      const deleteIngredient = (uid) => {
+        setIngredients(ingredients.filter(item => item.uid !== uid));
+      }
+    
+
     return(
         <div>
             <div className={styles.text}>食材</div>

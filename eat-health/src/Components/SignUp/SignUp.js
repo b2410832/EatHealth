@@ -6,7 +6,7 @@ import firebase from "firebase/app";
 
 import styles from './SignUp.module.scss';
 
-const SignUp = ({ setUser }) => {
+const SignUp = ({ setUser, setDisplayName }) => {
     let history = useHistory();
     let urlParams = new URLSearchParams(window.location.search);
     let to = urlParams.get("to");
@@ -27,7 +27,10 @@ const SignUp = ({ setUser }) => {
         storage.ref('usersProfile').child('avatar-4.png').getDownloadURL().then(url=> photoURL = url)
         auth.createUserWithEmailAndPassword(email, password)
         .then((user) => {
-            auth.currentUser.updateProfile({displayName: displayName, photoURL: photoURL});
+            auth.currentUser.updateProfile({displayName: displayName, photoURL: photoURL}).then(() => {
+                setUser(auth.currentUser);
+                setDisplayName(displayName); //
+            })
             db.collection("users").doc(auth.currentUser.uid)
                 .set({
                     displayName: displayName,
@@ -36,15 +39,6 @@ const SignUp = ({ setUser }) => {
                     userId: auth.currentUser.uid,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 })
-                // .then(() => {
-                //     // setUser(auth.currentUser);
-                //     setUser({
-                //         displayName: displayName,
-                //         photoURL: photoURL,
-                //         email: auth.currentUser.email,
-                //         userId: auth.currentUser.uid,
-                //     })
-                // })
             setInputs({email:"", password:"", name:""});
             setIsLoading(false);
             to ? history.push(to) : history.push("/"); 

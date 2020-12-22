@@ -1,7 +1,7 @@
 
 import styles from './Steps.module.scss';
+import defaultImg from "../../images/upload.png";
 
-import defaultImg from "../../images/upload.png"
 
 
 const Steps = ({ steps, setSteps }) => {
@@ -15,12 +15,34 @@ const Steps = ({ steps, setSteps }) => {
         setSteps([...steps, {
             uid: `${new Date().getTime()}`, 
             text:"", 
-            image: "",
+            imageUrl: null,
+            objectUrl: defaultImg, 
+            file: null,
         }]);
     }
 
     const deleteStep = (uid) => {
         setSteps(steps.filter(item => item.uid !== uid));
+    }
+
+    const handleFile = (e, uid) => {
+        let file = e.target.files[0];
+        let objectUrl = URL.createObjectURL(e.target.files[0]);
+
+        setSteps(steps.map(step => {
+            if(step.uid === uid) {
+                return { ...step, file, objectUrl }
+            }
+            return step;
+        }))
+    }
+    
+    const clearMemory = (uid) => {
+        steps.forEach(step => {
+            if(step.uid === uid) {
+                URL.revokeObjectURL(step.objectUrl); // free memory
+            }
+        });
     }
 
     return(
@@ -32,10 +54,10 @@ const Steps = ({ steps, setSteps }) => {
                     <div className={styles.step} key={step.uid}>
                          <div className={styles.upload}>
                             <div className={styles.imageContainer}>
-                                <img src={defaultImg} alt="食譜圖片" className={styles.image}></img>
+                                <img src={step.objectUrl} alt="食譜圖片" className={styles.image} onLoad={() => clearMemory(step.uid)}></img>
                             </div>
-                            <label htmlFor="upload-image" className={styles.label}>點擊上傳步驟照片</label>
-                            <input type="file" accept="image/*"className={styles.input} id="upload-image"></input>
+                            <label htmlFor={step.uid} className={styles.label}>點擊上傳步驟照片</label>
+                            <input type="file" accept="image/*" onChange={(e) => handleFile(e, step.uid)} className={styles.input} id={step.uid}></input>
                         </div>
                         <div className={styles.content}>
                             <div className={styles.stepNumber}>{index+1}.</div>

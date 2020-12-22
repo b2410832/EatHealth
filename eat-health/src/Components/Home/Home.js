@@ -32,7 +32,9 @@ const Home = () => {
         <div className={styles.container}>
             <div className={styles.cover}>
                 <div className={styles.cta}>
-                    <div className={styles.slogan}>You Are<br/>What You EAT</div>
+                    <div className={styles.slogan}>
+                        <div>You Are<br/>What You EAT</div>
+                    </div>
                     <div className={styles.intro}>全台灣最溫馨的<br/>健康食譜分享社群</div>
                     <Link to="/recipes?category=all">
                         <button className={styles.ctaBtn}>查看所有食譜 &nbsp;<FontAwesomeIcon icon={faArrowRight}></FontAwesomeIcon></button>
@@ -47,8 +49,8 @@ const Home = () => {
                         {
                             latest.map((recipe, index) => {
                                 return(
-                                    <Link to={`/recipes/${recipe.id}`} key={recipe.id}>
-                                        <div className={styles.recipe}>
+                                    <div className={styles.recipe}>
+                                        <Link to={`/recipes/${recipe.id}`} key={recipe.id}>
                                             <div className={styles.image}>
                                                 <img src={recipe.image} alt=""></img>
                                             </div>
@@ -60,8 +62,8 @@ const Home = () => {
                                                     <small>{recipe.mealTime}</small>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </Link>
+                                        </Link>
+                                    </div>
                                 )
                             })
                         }
