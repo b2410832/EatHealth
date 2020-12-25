@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { Link, useHistory } from "react-router-dom";
 import { auth, db, storage } from '../../firebase';
 import firebase from "firebase/app";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 
 
 import styles from './SignUp.module.scss';
 
-const SignUp = ({ setUser, setDisplayName }) => {
+const SignUp = ({ setUser }) => {
     let history = useHistory();
     let urlParams = new URLSearchParams(window.location.search);
     let to = urlParams.get("to");
@@ -27,10 +29,10 @@ const SignUp = ({ setUser, setDisplayName }) => {
         storage.ref('usersProfile').child('avatar-4.png').getDownloadURL().then(url=> photoURL = url)
         auth.createUserWithEmailAndPassword(email, password)
         .then((user) => {
-            auth.currentUser.updateProfile({displayName: displayName, photoURL: photoURL}).then(() => {
-                setUser(auth.currentUser);
-                setDisplayName(displayName); //
-            })
+            // auth.currentUser.updateProfile({displayName: displayName, photoURL: photoURL})
+            // .then(() => {
+            //     setUser(auth.currentUser);
+            // })
             db.collection("users").doc(auth.currentUser.uid)
                 .set({
                     displayName: displayName,
@@ -63,7 +65,13 @@ const SignUp = ({ setUser, setDisplayName }) => {
                         <input type="email" name="email" value={inputs.email} onChange={handleInputChange} placeholder="請輸入email信箱"></input>
                         <label htmlFor="password">密碼</label>
                         <input type="password" name="password" value={inputs.password} onChange={handleInputChange} placeholder="請輸入密碼"></input>
-                        <button className={styles.fullBtn} onClick={() => signUpWithEmailPassword(inputs.email, inputs.password, inputs.name)}>{isLoading? "註冊中..." : "註冊"}</button>
+                        <button className={styles.fullBtn} onClick={() => signUpWithEmailPassword(inputs.email, inputs.password, inputs.name)}>
+                            {
+                                isLoading 
+                                ? <FontAwesomeIcon icon={faCircleNotch} spin/> 
+                                : "註冊"
+                            }      
+                        </button>
                         <div>已經有帳號了嗎？<Link to={to? `/login?to=${to}`: "/login"}><span>登入會員</span></Link></div>
                     </div>
                 </div>

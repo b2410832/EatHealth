@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { auth } from '../../firebase';
+import { auth } from "../../firebase";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 
 
-import styles from './LogIn.module.scss';
+import styles from "./LogIn.module.scss";
+
 
 const LogIn = ({ setUser, setDisplayName }) => {
     let history = useHistory();
@@ -11,7 +14,7 @@ const LogIn = ({ setUser, setDisplayName }) => {
     let to = urlParams.get("to");
     
 
-    const [inputs, setInputs] = useState({email: "", password: ""});
+    const [inputs, setInputs] = useState({email: "test@test.test", password: "123456"});
     const [isLoading, setIsLoading] = useState(false);
 
     const handleInputChange = (e) => {
@@ -26,7 +29,7 @@ const LogIn = ({ setUser, setDisplayName }) => {
         auth.signInWithEmailAndPassword(email, password)
           .then((user) => {
             setUser(auth.currentUser); // displayName, email, uid, photoURL
-            setInputs({email:"", password:""});
+            // setInputs({email:"", password:""});
             setIsLoading(false);
             to ? history.push(to) : history.push("/")
           })
@@ -47,7 +50,13 @@ const LogIn = ({ setUser, setDisplayName }) => {
                         <input type="email" name="email" value={inputs.email} onChange={handleInputChange} placeholder="請輸入email信箱"></input>
                         <label htmlFor="password">密碼</label>
                         <input type="password" name="password" value={inputs.password} onChange={handleInputChange} placeholder="請輸入密碼"></input>
-                        <button className={styles.fullBtn} onClick={() => signInWithEmailPassword(inputs.email, inputs.password)}>{isLoading ? "登入中..." : "登入"}</button>
+                        <button className={styles.fullBtn} onClick={() => signInWithEmailPassword(inputs.email, inputs.password)}>
+                            {
+                                isLoading ?
+                                <FontAwesomeIcon icon={faCircleNotch} spin/> 
+                                : "登入"
+                            }           
+                        </button>
                         <div>還沒有帳號嗎？<Link to={to? `/signup?to=${to}`: "/signup"}><span>註冊新帳號</span></Link></div>
                     </div>
                 </div>

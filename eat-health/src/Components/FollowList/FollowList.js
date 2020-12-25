@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 
 
 import styles from "./FollowList.module.scss";
-import { db } from '../../firebase';
+import { db } from "../../firebase";
+import image from "../../images/recipe-06.png";
 
 
 const FollowList = ({ followings, user }) => {
@@ -81,6 +82,18 @@ const FollowList = ({ followings, user }) => {
     return (
         <div className={styles.followListContainer}>
             {
+                followingList.length === 0 ?
+                (
+                    <div className={styles.noFollowList}>
+                        <div className={styles.noFollowImage}>
+                            <img src={image} alt=""></img>
+                        </div>
+                        <div className={styles.text}>
+                            <div className={styles.title}>目前沒有追蹤中的人哦！</div>
+                            <button>查看更多食譜</button>
+                        </div>
+                    </div>
+                ) :
                 followingList.map(following => {
                     return (
                         <div  className={styles.follow} key={following.userId}>

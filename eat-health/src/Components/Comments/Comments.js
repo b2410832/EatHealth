@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./Comments.module.scss";
 import defaultPhoto from "../../images/avatar-default.png";
 import firebase from "firebase/app";
 import { db } from "../../firebase";
-import loading from "../../images/rolling.gif";
+import Modal from "../Modal/Modal";
 
 const Comments = ({ user }) => {
-    const [input, setInput] = useState("");
-    const [commentsList, setCommentsList] = useState([]);
+    const [ input, setInput ] = useState("");
+    const [ commentsList, setCommentsList ] = useState([]);
+    const [ showCommentModal, setShowCommentModal ] = useState(false);
+    const [ showDeleteModal, setShowDeleteModal ] = useState(false);
+
     const { recipeId } = useParams();
 
     useEffect(() => {
@@ -41,6 +44,7 @@ const Comments = ({ user }) => {
             commentId: doc.id,
         });
         setInput("");
+        setShowCommentModal(false);
     }
 
     const handleEditing = (index) => {
@@ -58,7 +62,16 @@ const Comments = ({ user }) => {
     const deleteComment = (index) => {
         db.collection("recipes").doc(recipeId).collection("comments").doc(index).delete()
         .then(result => console.log("成功刪除評論"))
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
+        setShowDeleteModal(false);
+    }
+
+    const toggleShowCommentModal = () => {
+        setShowCommentModal(!showCommentModal);
+    }
+
+    const toggleShowDeleteModal = () => {
+        setShowDeleteModal(!showDeleteModal);
     }
 
     // 依照登入狀況render評論section
@@ -71,8 +84,8 @@ const Comments = ({ user }) => {
                 <textarea value={input} onChange={handleInputChange} placeholder="發表對這個食譜的想法或試做的心得吧！"></textarea>
                 {
                     input.trim().length > 0 ?
-                    <button className={styles.fullBtn} onClick={postComment}>發布留言</button>
-                    : <button className={styles.fullBtn} onClick={postComment} disabled>發布留言</button>
+                    <button className={styles.fullBtn} onClick={toggleShowCommentModal}>發布留言</button>
+                    : <button className={styles.fullBtn} disabled>發布留言</button>
                 }
             </div>
         </div>
@@ -82,7 +95,7 @@ const Comments = ({ user }) => {
             <img src={defaultPhoto} alt=""></img>
             <div className={styles.input}>
                 <textarea value={input} onChange={handleInputChange} placeholder="嗨訪客，請先登入才能發表留言哦！" disabled></textarea>
-                <button className={styles.fullBtn} onClick={postComment} disabled>發布留言</button>
+                <button className={styles.fullBtn} disabled>發布留言</button>
             </div>
         </div>
     }
@@ -106,11 +119,18 @@ const Comments = ({ user }) => {
                                         <FontAwesomeIcon icon={faEllipsisH}/>
                                         {
                                             comment.isEditing && 
-                                            <div className={styles.delete} onClick={() => deleteComment(comment.commentId)}>
+                                            // <div className={styles.delete} onClick={() => deleteComment(comment.commentId)}>
+                                            //     <div>刪除留言</div>
+                                            // </div>
+                                            <div className={styles.delete} onClick={toggleShowDeleteModal}>
                                                 <div>刪除留言</div>
                                             </div>
                                         }
                                     </div>
+                                    {
+                                        showDeleteModal && 
+                                        <Modal text="確定要刪除這則留言？" handleCancel={toggleShowDeleteModal} handelConfirm={() => deleteComment(comment.commentId)}/>
+                                    }
                                 </div>
                             )
                         }
@@ -126,6 +146,10 @@ const Comments = ({ user }) => {
                     })
                 }
             </div>
+            {
+                showCommentModal &&
+                <Modal text="確定要發布這則留言？" handleCancel={toggleShowCommentModal} handelConfirm={postComment}/>
+            }
         </div>
     )
 }

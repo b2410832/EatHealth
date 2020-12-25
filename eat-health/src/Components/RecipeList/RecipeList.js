@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart, faCommentAlt } from '@fortawesome/free-regular-svg-icons'
 import { BrowserRouter as Router, Switch, Route, Link, useHistory, useRouteMatch, useParams, NavLink } from "react-router-dom";
 
 import RecipeListItem from "../RecipeListItem/RecipeListItem"
@@ -8,11 +6,12 @@ import styles from './RecipeList.module.scss';
 import { db } from '../../firebase';
 
 const RecipeList = ({ subProfile }) => {
-    const [recipeList, setRecipeList] = useState([]);
+    const [ recipeList, setRecipeList ] = useState([]);
 
-    let { path, url } = useRouteMatch();
+    // 個人頁面-收藏食譜
     let { userId } = useParams();
 
+    // 食譜列表-篩選食譜
     let urlParams = new URLSearchParams(window.location.search);
     let category = urlParams.get("category");
     let mealTime = urlParams.get("mealTime");
@@ -35,6 +34,7 @@ const RecipeList = ({ subProfile }) => {
                             category: recipe.category,
                             mealTime: recipe.mealTime,
                             liked: 0,
+                            commments: 0,
                         }];
                         setRecipeList(favorites);
                     })
@@ -55,6 +55,7 @@ const RecipeList = ({ subProfile }) => {
                         category: recipe.category,
                         mealTime: recipe.mealTime,
                         liked: 0,
+                        commments: 0,
                     }]
                 })
                 setRecipeList(newRecipeList);
@@ -66,41 +67,41 @@ const RecipeList = ({ subProfile }) => {
         <div className={styles.recipeList}>
             {
                 recipeList
-                .filter(recipe => {
-                    switch (category) {
-                        case "balanced" :
-                            return recipe.category === "均衡料理";
-                        case "lowcarbs" :
-                            return recipe.category === "減醣料理";
-                        case "highpt" :
-                            return recipe.category === "增肌料理";
-                        default:
-                            return true;
-                    }
-                })
-                .filter(recipe => {
-                    switch (mealTime) {
-                        case "breakfast" :
-                            return recipe.mealTime === "早餐";
-                        case "lunchDinner" :
-                            return recipe.mealTime === "午晚餐";
-                        case "dessert" :
-                            return recipe.mealTime === "點心";
-                        default:
-                            return true;
-                    }
-                })
-                .filter(recipe => {
-                    if(subProfile === "myRecipes") {
-                        return recipe.authorId === userId;
-                    }
-                    return true;
-                })
-                .map((recipe) => {
-                    return (
-                        <RecipeListItem recipe={recipe} key={recipe.id}/>
-                    )
-                })
+                    .filter(recipe => {
+                        switch (category) {
+                            case "balanced" :
+                                return recipe.category === "均衡料理";
+                            case "lowcarbs" :
+                                return recipe.category === "減醣料理";
+                            case "highpt" :
+                                return recipe.category === "增肌料理";
+                            default:
+                                return true;
+                        }
+                    })
+                    .filter(recipe => {
+                        switch (mealTime) {
+                            case "breakfast" :
+                                return recipe.mealTime === "早餐";
+                            case "lunchDinner" :
+                                return recipe.mealTime === "午晚餐";
+                            case "dessert" :
+                                return recipe.mealTime === "點心";
+                            default:
+                                return true;
+                        }
+                    })
+                    .filter(recipe => {
+                        if(subProfile === "myRecipes") {
+                            return recipe.authorId === userId;
+                        }
+                        return true;
+                    })
+                    .map((recipe) => {
+                        return (
+                            <RecipeListItem recipe={recipe} key={recipe.id}/>
+                        )
+                    })
             }
         </div>
     )

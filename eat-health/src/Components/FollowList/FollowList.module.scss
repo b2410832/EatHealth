@@ -2,6 +2,24 @@
     border: 1px solid #e4e6e9;
     padding: 20px;
     min-height: 300px;
+    .noFollowList {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .noFollowImage {
+            width: 30%;
+            img {
+                width: 100%;
+            }
+        }
+        .text {
+            width: 50%;
+            .title {
+                font-weight: bold;
+                font-size: 18px;
+            }
+        }
+    }
     .follow {
         display: flex;
         align-items: center;

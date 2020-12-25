@@ -9,7 +9,6 @@ import styles from './Recipe.module.scss';
 import tipsBulb from '../../images/tips-bulb.svg';
 import { db } from '../../firebase';
 import Chart from "../Chart/Chart";
-import firebase from "firebase/app";
 import Comments from "../Comments/Comments";
 import CategoryBox from "../CategoryBox/CategoryBox";
 import RecommendedBox from "../RecommendedBox/RecommendedBox";
@@ -92,7 +91,6 @@ const Recipe = ({ user }) => {
                     if(user.uid === recipe.authorId) {
                         setIsMyself(true);
                     } else {
-                        // setIsfollowing(false);
                         db.collection("users").doc(user.uid).collection("followings")
                         .onSnapshot(snapshot => {
                             setIsfollowing(false);//
@@ -322,7 +320,11 @@ const Recipe = ({ user }) => {
                                 return(
                                     <div className={styles.step} key={step.uid}>
                                         <div className={styles.photo}>
-                                            <img src={step.imageUrl} alt={`步驟${index+1}`}></img>
+                                            {
+                                                step.imageUrl 
+                                                ? <img src={step.imageUrl} alt={`步驟${index+1}`}></img>
+                                                : <div></div> 
+                                            }
                                         </div>
                                         <div className={styles.content}>
                                             <div className={styles.stepNumber}>{index+1}.</div>

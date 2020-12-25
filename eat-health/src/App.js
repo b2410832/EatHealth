@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { auth, db } from './firebase';
 
@@ -9,9 +9,9 @@ import Home from "./Components/Home/Home";
 import SignUp from "./Components/SignUp/SignUp";
 import LogIn from "./Components/LogIn/LogIn";
 import Recipes from "./Components/Recipes/Recipes";
-// import RecipeList from "./Components/RecipeList/RecipeList";
 import Recipe from "./Components/Recipe/Recipe";
 import Profile from "./Components/Profile/Profile";
+import Loading from "./Components/Loading/Loading";
 import PrivateRoute from "./PrivateRoute";
 import styles from "./App.module.scss";
 
@@ -19,22 +19,33 @@ import styles from "./App.module.scss";
 const App = () => {
   const [ user, setUser ] = useState(null);
 
-  auth.onAuthStateChanged(function(user) {
-    if (user) {
-        // console.log("user",auth.currentUser);
-        setUser(auth.currentUser);
-
-    } else {
-      setUser(false);
-    }
-  });
+  useEffect(() => {
+    auth.onAuthStateChanged(function(user) {
+      if (user) {
+          // console.log("user",auth.currentUser);
+          // setUser(auth.currentUser);
+        console.log("user", user);
+        db.collection("users").doc(user.uid).onSnapshot(snapshot => {
+          let data = snapshot.data();
+          if(data) {
+            console.log("snapshot", snapshot.data());
+            setUser({
+              uid: data.userId,
+              photoURL: data.photoURL,
+              displayName: data.displayName,
+              email: data.email,
+            });
+          }
+        })
+      } else {
+        setUser(false);
+      }
+    });
+  }, []);
   
   if(user === null) {
     return (
-      <div className={styles.loaderContainer}>
-        <div className={styles.loader}></div>
-        <h2 className={styles.h2}>Loading...</h2>
-      </div>
+      <Loading />
     )
   } else {
     return (

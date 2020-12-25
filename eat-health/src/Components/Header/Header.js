@@ -13,6 +13,7 @@ import defaultAvatar from "../../images/avatar-default.png";
 const Header = ({ user }) => { 
     const [isExploring, setIsExploring] = useState(false);   
     let history = useHistory();
+
     const div = useRef();
 
     const logout = () => {
@@ -30,7 +31,7 @@ const Header = ({ user }) => {
     }
 
     const toggleIsExploring = () => {
-        isExploring ? div.current.style.top = "0px" : div.current.style.top = "65px"
+        isExploring ? div.current.style.top = "-10px" : div.current.style.top = "65px"
         setIsExploring(!isExploring);
     }
 
@@ -77,12 +78,12 @@ const Header = ({ user }) => {
                                 </div>
                             </div>
                         : 
-                        <div style={{display: "flex"}}>
+                        <div className={styles.member}>
+                            <Link to="/signup">
+                                <button className={styles.lineBtn}>註冊</button>
+                            </Link>
                             <Link to="/login">
                                 <div className={styles.log}>登入</div>
-                            </Link>
-                            <Link to="/signup">
-                                <div className={styles.log}>註冊</div>
                             </Link>
                         </div>
                     }

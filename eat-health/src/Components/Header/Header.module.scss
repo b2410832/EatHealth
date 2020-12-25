@@ -8,7 +8,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 100;
+    z-index: 1000;
     .top {
         border-bottom: 1px solid #e4e6e9;
         display: flex;
@@ -49,29 +49,35 @@
         .right {
             display: flex;
             align-items: center;
-            .search input{
-                border: none;
-                height: 30px;
-                outline: none;
-                margin-left: 5px;
-                border-bottom: 1px solid #e4e6e9;
-                transition: all 1s;
+            // .search input{
+            //     border: none;
+            //     height: 30px;
+            //     outline: none;
+            //     margin-left: 5px;
+            //     border-bottom: 1px solid #e4e6e9;
+            //     transition: all 1s;
     
-                background-color: #f0f0f0;
-                padding-left: 5px;
-                padding-right: 5px;
-                border-radius: 5px;
-                margin-right: 5px;
-            }
+            //     background-color: #f0f0f0;
+            //     padding-left: 5px;
+            //     padding-right: 5px;
+            //     border-radius: 5px;
+            //     margin-right: 5px;
+            // }
             // .search input:focus {
             //     border-bottom: 1.5px solid #05172c;
             // }
-            .log{
-                padding: 0 10px;
+            .member {
+                display: flex;
+                align-items: center;
+                .log{
+                    padding: 0 10px;
+                    transition: all .2s;
+                    &:hover {
+                        color: #85bf3e;
+                    }
+                }
             }
-            .log:nth-child(2) {
-                border-right: 1px solid #e4e6e9;
-            }
+            
             
             .profile {
                 display: flex;
@@ -177,27 +183,35 @@
         border: none;
         background-color: #85bf3e;
         color: #ffffff;
-        padding-left: 10px;
-        padding-right: 10px;
-        height: 35px;
+        padding: 5px 10px;
         border-radius: 5px;
+        border: 1px solid #85bf3e;
         outline: none;
         cursor: pointer;
         margin-right: 30px;
         font-size: 18px;
+        transition: all .2s;
+
+        &:hover {
+            background-color: #72a534;
+        }
     }
     .lineBtn {
         border: none;
         background-color: #ffffff;
         border: 1px solid #85bf3e;
         color: #85bf3e;
-        padding-left: 10px;
-        padding-right: 10px;
-        height: 30px;
+        padding: 5px 10px;
         border-radius: 5px;
         outline: none;
         cursor: pointer;
         margin-right: 10px;
-        font-size: 16px;
+        font-size: 18px;
+        transition: all .2s;
+
+        &:hover {
+            color: #ffffff;
+            background-color: #85bf3e;
+        }
     }
 }

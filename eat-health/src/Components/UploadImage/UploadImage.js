@@ -17,12 +17,15 @@ const UploadImage = ({ file, setFile }) => {
     }
 
     return(
-        <div className={styles.upload}>
-            <div className={styles.imageContainer}>
-                <img src={objectUrl} alt="食譜圖片" onLoad={clearMemory} className={styles.image}></img>
+        <div>
+            <div className={styles.text}>封面照片</div>
+            <div className={styles.upload}>
+                <div className={styles.imageContainer}>
+                    <img src={objectUrl} alt="食譜圖片" onLoad={clearMemory} className={styles.image}></img>
+                </div>
+                <label htmlFor="upload-image" className={styles.label}>點擊上傳食譜封面照片</label>
+                <input type="file" accept="image/*" onChange={handleFile} className={styles.input} id="upload-image"></input>
             </div>
-            <label htmlFor="upload-image" className={styles.label}>點擊上傳食譜照片</label>
-            <input type="file" accept="image/*" onChange={handleFile} className={styles.input} id="upload-image"></input>
         </div>
     )
 }

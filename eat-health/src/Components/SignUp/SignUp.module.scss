@@ -5,7 +5,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 500;
+    z-index: 1000;
     .container{
         display: flex;
         background-color: #ffffff;
@@ -45,6 +45,12 @@
                     outline: none;
                     width: 100%;
                     font-size: 16px;
+                    transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+                    &:focus {
+                        border-color: rgba(82, 168, 236, 0.8);
+                        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+                        outline: 0 none;
+                    }
                 }
                 .fullBtn {
                     border: none;
@@ -55,10 +61,15 @@
                     border-radius: 30px;
                     outline: none;
                     cursor: pointer;
-                    font-size: 16px;
+                    font-size: 18px;
                     margin-right: 20px;
                     letter-spacing: 2px;
                     margin-bottom: 20px;
+                    transition: all .2s;
+
+                    &:hover {
+                        background-color: #72a534;
+                    }
                 }
                 a {
                     text-decoration: underline;
