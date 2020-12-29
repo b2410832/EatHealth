@@ -1,12 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useRouteMatch,
-  useHistory,
-  NavLink,
-  useParams,
-} from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import RecipeList from "../RecipeList/RecipeList";
 import FollowList from "../FollowList/FollowList";

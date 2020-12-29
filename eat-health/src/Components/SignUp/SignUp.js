@@ -1,22 +1,26 @@
 import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { auth, db, storage } from "../../firebase";
-import firebase from "firebase/app";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 
+import {
+  getImageUrlFromStorage,
+  postUser,
+  createNativeUser,
+} from "../../utils/firebase";
 import styles from "./SignUp.module.scss";
+
 import Alert from "../Alert/Alert";
 
-const SignUp = ({ setUser }) => {
+const SignUp = () => {
   let history = useHistory();
   let urlParams = new URLSearchParams(window.location.search);
   let to = urlParams.get("to");
 
   const [inputs, setInputs] = useState({ email: "", password: "", name: "" });
   const [isLoading, setIsLoading] = useState(false);
-  const [showAlert, setShowAlert] = useState(false); // 警告視窗
-  const [alertText, setAlertText] = useState(""); // 警告視窗文字
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertText, setAlertText] = useState("");
 
   const handleInputChange = (e) => {
     setInputs({
@@ -27,45 +31,27 @@ const SignUp = ({ setUser }) => {
 
   const signUpWithEmailPassword = (email, password, displayName) => {
     setIsLoading(true);
-    let photoURL = "";
-    storage
-      .ref("usersProfile")
-      .child("avatar-4.png")
-      .getDownloadURL()
-      .then((url) => (photoURL = url));
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then((user) => {
-        // auth.currentUser.updateProfile({displayName: displayName, photoURL: photoURL})
-        // .then(() => {
-        //     setUser(auth.currentUser);
-        // })
-        db.collection("users").doc(auth.currentUser.uid).set({
-          displayName: displayName,
-          photoURL: photoURL,
-          email: auth.currentUser.email,
-          userId: auth.currentUser.uid,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    getImageUrlFromStorage("usersProfile", "avatar-4.png", (urlData) => {
+      createNativeUser(email, password)
+        .then((res) => {
+          postUser(displayName, urlData);
+          setInputs({ email: "", password: "", name: "" });
+          setIsLoading(false);
+          history.push("/");
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          if (error.code === "auth/invalid-email") {
+            setShowAlert(true);
+            setAlertText("請輸入完整的信箱格式");
+          } else if (error.code === "auth/weak-password") {
+            setShowAlert(true);
+            setAlertText("請輸入6字以上的密碼");
+          }
         });
-        setInputs({ email: "", password: "", name: "" });
-        setIsLoading(false);
-        // to ? history.push(to) : history.push("/");
-        history.push("/");
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        if (error.code === "auth/invalid-email") {
-          setShowAlert(true);
-          setAlertText("請輸入完整的信箱格式");
-        } else if (error.code === "auth/weak-password") {
-          setShowAlert(true);
-          setAlertText("請輸入6字以上的密碼");
-        }
-        console.log(error);
-      });
+    });
   };
 
-  // alert點擊確認
   const toggleAlert = () => {
     setShowAlert(false);
   };

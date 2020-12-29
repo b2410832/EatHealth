@@ -1,13 +1,5 @@
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useHistory,
-  useRouteMatch,
-  useParams,
-} from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart,
@@ -20,14 +12,14 @@ import {
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
-import styles from "./Recipe.module.scss";
-import tipsBulb from "../../images/tips-bulb.svg";
-import { db } from "../../firebase";
+import { db } from "../../utils/firebase";
 import Chart from "../Chart/Chart";
 import Comments from "../Comments/Comments";
 import CategoryBox from "../CategoryBox/CategoryBox";
 import RecommendedBox from "../RecommendedBox/RecommendedBox";
 import Alert from "../Alert/Alert";
+import styles from "./Recipe.module.scss";
+import tipsBulb from "../../images/tips-bulb.svg";
 
 const Recipe = ({ user }) => {
   let { recipeId } = useParams();
@@ -47,8 +39,8 @@ const Recipe = ({ user }) => {
   const [isFollowing, setIsfollowing] = useState(false);
   const [isMyself, setIsMyself] = useState(false);
   const [authorFans, setAuthorFans] = useState(0);
-  const [showAlert, setShowAlert] = useState(false); // 警告視窗
-  const [alertText, setAlertText] = useState(""); // 警告視窗文字
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertText, setAlertText] = useState("");
 
   useEffect(() => {
     setNutrition({
@@ -180,42 +172,6 @@ const Recipe = ({ user }) => {
           console.log("doc not exist");
         }
       });
-    // // 此使用者是否按過這個食譜讚&收藏過&追蹤此作者
-    // if(user) {
-    //     db.collection("users").doc(user.uid).collection("liked")
-    //     .onSnapshot(snapshot => {
-    //         snapshot.docs.forEach(doc  => {
-    //             if(doc.id === recipeId){
-    //                 setIsLiked(true);
-    //             }
-    //         });
-    //     })
-    //     db.collection("users").doc(user.uid).collection("favorites")
-    //     .onSnapshot(snapshot => {
-    //         snapshot.docs.forEach(doc  => {
-    //             if(doc.id === recipeId){
-    //                 setIsAdded(true);
-    //             }
-    //         });
-    //     })
-
-    //     if(user.uid === recipe.authorId) {
-    //         setIsMyself(true);
-    //     } else {
-    //         // setIsfollowing(false);
-    //         db.collection("users").doc(user.uid).collection("followings")
-    //         .onSnapshot(snapshot => {
-    //             snapshot.docs.forEach(doc  => {
-    //                 console.log(doc.id, recipe.authorId);
-    //                 if(doc.id === recipe.authorId){
-    //                     setIsfollowing(true);
-    //                 }
-    //             });
-    //         })
-    //         setIsMyself(false);
-    //     }
-    // }
-    // console.log("recipe.authorId:",recipe.authorId, "recipeId:",recipeId);
   }, [recipe.authorId, recipeId]);
 
   const toggleLiked = () => {
@@ -324,7 +280,6 @@ const Recipe = ({ user }) => {
     }
   };
 
-  // alert點擊確認
   const toggleAlert = () => {
     setShowAlert(!showAlert);
   };

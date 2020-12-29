@@ -1,21 +1,10 @@
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useHistory,
-  NavLink,
-} from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { Link, useHistory, NavLink } from "react-router-dom";
+import { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSearch,
-  faChevronDown,
-  faChevronUp,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
+import { logoutFromAuth } from "../../utils/firebase";
 import styles from "./Header.module.scss";
-import { auth } from "../../firebase";
 import logo from "../../images/logo-full.png";
 
 const Header = ({ user }) => {
@@ -25,14 +14,7 @@ const Header = ({ user }) => {
   const div = useRef();
 
   const logout = () => {
-    auth
-      .signOut()
-      .then(function () {
-        history.push("/");
-      })
-      .catch(function (error) {
-        alert("登出失敗");
-      });
+    logoutFromAuth(() => history.push("/"));
   };
 
   const isActiveLink = (params) => {
@@ -79,18 +61,12 @@ const Header = ({ user }) => {
           )}
         </div>
         <div className={styles.right}>
-          {/* <form className={styles.search}>
-                        <FontAwesomeIcon icon={faSearch} style={{color:"#8a949f"}}/>
-                        <input type="search" placeholder="今天想煮什麼？"></input>
-                    </form> */}
-
           <Link to="/writeRecipe">
             <button className={styles.fullBtn}>+ 寫食譜</button>
           </Link>
           {user ? (
             <div style={{ display: "flex" }}>
               <div className={styles.profile}>
-                {/* <img src={defaultAvatar} alt="會員"></img> */}
                 <img src={user.photoURL} alt="會員"></img>
                 <div>{user.displayName}</div>
                 <div className={styles.dropdown}>

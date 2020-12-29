@@ -14,7 +14,7 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import styles from "./Profile.module.scss";
 import SubProfile from "../SubProfile/SubProfile";
 
-import { db } from "../../firebase";
+import { db } from "../../utils/firebase";
 
 const Profile = ({ user }) => {
   const [profile, setProfile] = useState({});

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./FollowList.module.scss";
-import { db } from "../../firebase";
+import { db } from "../../utils/firebase";
 import image from "../../images/noFollowing.png";
 
 const FollowList = ({
@@ -14,13 +14,10 @@ const FollowList = ({
   setGotFollowingsData,
 }) => {
   const [followingList, setFollowingList] = useState([]);
-  // const [ gotData, setGotData ] = useState(false);
 
   let history = useHistory();
 
   useEffect(() => {
-    // setGotData(false); //
-
     let newFollowingList = [];
     followings.forEach((followingId) => {
       // 取得每個追蹤者的基本資訊
@@ -139,72 +136,67 @@ const FollowList = ({
   if (gotFollowingsData) {
     return (
       <div className={styles.followListContainer}>
-        {
-          // followingList.length === 0 ?
-          followings.length === 0 ? (
-            <div className={styles.noFollowList}>
-              <div className={styles.noFollowImage}>
-                <img src={image} alt=""></img>
-              </div>
-              <div className={styles.text}>
-                <div className={styles.title}>目前沒有追蹤中的人哦！</div>
-                <div className={styles.description}>
-                  追蹤後即可於個人頁面
-                  <br />
-                  查看其他人寫的食譜
-                </div>
-                <button className={styles.fullBtn} onClick={handleClickMore}>
-                  查看更多食譜
-                </button>
-              </div>
+        {followings.length === 0 ? (
+          <div className={styles.noFollowList}>
+            <div className={styles.noFollowImage}>
+              <img src={image} alt=""></img>
             </div>
-          ) : (
-            followingList.map((following) => {
-              return (
-                <div className={styles.follow} key={following.userId}>
-                  <Link to={`/profile/${following.userId}/myRecipes`}>
-                    <div className={styles.user}>
-                      <div className={styles.image}>
-                        <img src={following.photoURL} alt=""></img>
-                      </div>
-                      <div className={styles.info}>
-                        <div className={styles.name}>
-                          {following.displayName}
+            <div className={styles.text}>
+              <div className={styles.title}>目前沒有追蹤中的人哦！</div>
+              <div className={styles.description}>
+                追蹤後即可於個人頁面
+                <br />
+                查看其他人寫的食譜
+              </div>
+              <button className={styles.fullBtn} onClick={handleClickMore}>
+                查看更多食譜
+              </button>
+            </div>
+          </div>
+        ) : (
+          followingList.map((following) => {
+            return (
+              <div className={styles.follow} key={following.userId}>
+                <Link to={`/profile/${following.userId}/myRecipes`}>
+                  <div className={styles.user}>
+                    <div className={styles.image}>
+                      <img src={following.photoURL} alt=""></img>
+                    </div>
+                    <div className={styles.info}>
+                      <div className={styles.name}>{following.displayName}</div>
+                      <div className={styles.details}>
+                        <div className={styles.fans}>
+                          粉絲&nbsp;{following.fans}
                         </div>
-                        <div className={styles.details}>
-                          <div className={styles.fans}>
-                            粉絲&nbsp;{following.fans}
-                          </div>
-                          <div className={styles.recipes}>
-                            食譜&nbsp;{following.recipes}
-                          </div>
+                        <div className={styles.recipes}>
+                          食譜&nbsp;{following.recipes}
                         </div>
                       </div>
                     </div>
-                  </Link>
-                  <div className={styles.followBtn}>
-                    {following.isFollowing ? (
-                      <button
-                        className={styles.greyBtn}
-                        onClick={() => toggleFollowing(following.userId)}
-                      >
-                        <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>
-                        &nbsp;已追蹤
-                      </button>
-                    ) : (
-                      <button
-                        className={styles.darkBtn}
-                        onClick={() => toggleFollowing(following.userId)}
-                      >
-                        追蹤
-                      </button>
-                    )}
                   </div>
+                </Link>
+                <div className={styles.followBtn}>
+                  {following.isFollowing ? (
+                    <button
+                      className={styles.greyBtn}
+                      onClick={() => toggleFollowing(following.userId)}
+                    >
+                      <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>
+                      &nbsp;已追蹤
+                    </button>
+                  ) : (
+                    <button
+                      className={styles.darkBtn}
+                      onClick={() => toggleFollowing(following.userId)}
+                    >
+                      追蹤
+                    </button>
+                  )}
                 </div>
-              );
-            })
-          )
-        }
+              </div>
+            );
+          })
+        )}
       </div>
     );
   } else {

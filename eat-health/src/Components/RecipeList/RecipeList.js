@@ -1,28 +1,18 @@
 import { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useHistory,
-  useRouteMatch,
-  useParams,
-  NavLink,
-} from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+
+import { getFavorites, getRecipe, getAllRecipes } from "../../utils/firebase";
+import styles from "./RecipeList.module.scss";
+import image from "../../images/noRecipe.png";
 
 import RecipeListItem from "../RecipeListItem/RecipeListItem";
-import styles from "./RecipeList.module.scss";
-import { db } from "../../firebase";
-import image from "../../images/noRecipe.png";
 
 const RecipeList = ({ subProfile }) => {
   const [recipeList, setRecipeList] = useState([]);
-  const [gotData, setGotData] = useState(false); //
+  const [gotData, setGotData] = useState(false);
 
-  // 個人頁面-收藏食譜
   let { userId } = useParams();
 
-  // 食譜列表-篩選食譜
   let urlParams = new URLSearchParams(window.location.search);
   let category = urlParams.get("category");
   let mealTime = urlParams.get("mealTime");
@@ -32,71 +22,29 @@ const RecipeList = ({ subProfile }) => {
     setRecipeList([]);
 
     if (subProfile === "favorites") {
-      db.collection("users")
-        .doc(userId)
-        .collection("favorites")
-        .get()
-        .then((docs) => {
-          let favorites = [];
-          let promises = [];
-          docs.forEach((doc) => {
-            promises = [
-              ...promises,
-              db
-                .collection("recipes")
-                .doc(doc.id)
-                .get()
-                .then((doc) => {
-                  const recipe = doc.data();
-                  favorites = [
-                    ...favorites,
-                    {
-                      id: recipe.id,
-                      image: recipe.image,
-                      title: recipe.title,
-                      authorName: recipe.authorName,
-                      authorId: recipe.authorId,
-                      authorPhotoURL: recipe.authorPhotoURL,
-                      category: recipe.category,
-                      mealTime: recipe.mealTime,
-                      liked: 0,
-                      commments: 0,
-                    },
-                  ];
-                  setRecipeList(favorites);
-                }),
-            ];
-          });
-          Promise.all(promises).then((response) => {
-            setGotData(true);
-          });
+      getFavorites(userId).then((favorites) => {
+        const getFavoritesData = [];
+        favorites.forEach((favorite) => {
+          getFavoritesData.push(getRecipe(favorite.id));
         });
-    } else {
-      db.collection("recipes")
-        .get()
-        .then((docs) => {
-          let newRecipeList = [];
-          docs.forEach((doc) => {
-            const recipe = doc.data();
-            newRecipeList = [
-              ...newRecipeList,
-              {
-                id: recipe.id,
-                image: recipe.image,
-                title: recipe.title,
-                authorName: recipe.authorName,
-                authorId: recipe.authorId,
-                authorPhotoURL: recipe.authorPhotoURL,
-                category: recipe.category,
-                mealTime: recipe.mealTime,
-                liked: 0,
-                commments: 0,
-              },
-            ];
-          });
-          setRecipeList(newRecipeList);
+        Promise.all(getFavoritesData).then((favoriteDocs) => {
+          setRecipeList(
+            favoriteDocs.map((favoriteDoc) => {
+              return { ...favoriteDoc.data(), liked: 0, commments: 0 };
+            })
+          );
           setGotData(true);
         });
+      });
+    } else {
+      getAllRecipes().then((recipesDocs) => {
+        setRecipeList(
+          recipesDocs.docs.map((recipeDoc) => {
+            return { ...recipeDoc.data(), like: 0, commments: 0 };
+          })
+        );
+        setGotData(true);
+      });
     }
   }, [subProfile]);
 
@@ -131,7 +79,6 @@ const RecipeList = ({ subProfile }) => {
       }
       return true;
     });
-  console.log("filteredRecipeList", filteredRecipeList);
 
   if (gotData) {
     return (

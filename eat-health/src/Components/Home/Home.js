@@ -1,13 +1,13 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
+import { getLatests, getMealTimes } from "../../utils/firebase";
 import styles from "./Home.module.scss";
 import coverPhoto from "../../images/cover.svg";
-import { useEffect, useState } from "react";
-import { db } from "../../firebase";
 import image from "../../images/noRecipe.png";
 
 const Home = () => {
@@ -18,7 +18,6 @@ const Home = () => {
 
   const responsive = {
     superLargeDesktop: {
-      // the naming can be any, depends on you.
       breakpoint: { max: 4000, min: 3000 },
       items: 4,
     },
@@ -37,99 +36,30 @@ const Home = () => {
   };
 
   useEffect(() => {
-    // 最新食譜
-    db.collection("recipes")
-      .orderBy("createdTime", "desc")
-      .limit(6)
-      .get()
-      .then((docs) => {
-        let data = [];
-        docs.forEach((doc) => {
-          let recipe = doc.data();
-          data = [
-            ...data,
-            {
-              title: recipe.title,
-              authorName: recipe.authorName,
-              category: recipe.category,
-              mealTime: recipe.mealTime,
-              image: recipe.image,
-              id: recipe.id,
-            },
-          ];
-        });
-        setLatest(data);
-      });
-    // 早餐
-    db.collection("recipes")
-      .where("mealTime", "==", "早餐")
-      .limit(6)
-      .get()
-      .then((docs) => {
-        let data = [];
-        docs.forEach((doc) => {
-          let recipe = doc.data();
-          data = [
-            ...data,
-            {
-              title: recipe.title,
-              authorName: recipe.authorName,
-              category: recipe.category,
-              mealTime: recipe.mealTime,
-              image: recipe.image,
-              id: recipe.id,
-            },
-          ];
-        });
-        setBreakfast(data);
-      });
-    // 下午茶
-    db.collection("recipes")
-      .where("mealTime", "==", "點心")
-      .limit(6)
-      .get()
-      .then((docs) => {
-        let data = [];
-        docs.forEach((doc) => {
-          let recipe = doc.data();
-          data = [
-            ...data,
-            {
-              title: recipe.title,
-              authorName: recipe.authorName,
-              category: recipe.category,
-              mealTime: recipe.mealTime,
-              image: recipe.image,
-              id: recipe.id,
-            },
-          ];
-        });
-        setDessert(data);
-      });
+    getLatests().then((latests) => {
+      setLatest(latests.docs.map((latest) => latest.data()));
+    });
+
+    getMealTimes("早餐").then((breakfasts) => {
+      setBreakfast(breakfasts.docs.map((breakfast) => breakfast.data()));
+    });
+
+    getMealTimes("點心").then((desserts) => {
+      setDessert(desserts.docs.map((dessert) => dessert.data()));
+    });
     // 午晚餐
-    db.collection("recipes")
-      .where("mealTime", "==", "午晚餐")
-      .limit(6)
-      .get()
-      .then((docs) => {
-        let data = [];
-        docs.forEach((doc) => {
-          let recipe = doc.data();
-          data = [
-            ...data,
-            {
-              title: recipe.title,
-              authorName: recipe.authorName,
-              category: recipe.category,
-              mealTime: recipe.mealTime,
-              image: recipe.image,
-              id: recipe.id,
-            },
-          ];
-        });
-        setDinner(data);
-      });
+    getMealTimes("午晚餐").then((dinners) => {
+      setDinner(dinners.docs.map((dinner) => dinner.data()));
+    });
   }, []);
+
+  const CustomRightArrow = ({ onClick, ...rest }) => {
+    return <button onClick={() => onClick()} className={styles.rightArrow} />;
+  };
+
+  const CustomLeftArrow = ({ onClick, ...rest }) => {
+    return <button onClick={() => onClick()} className={styles.leftArrow} />;
+  };
 
   return (
     <div className={styles.homeContainer}>
@@ -137,7 +67,6 @@ const Home = () => {
         <div className={styles.cta}>
           <div className={styles.sloganContainer}>
             <div className={styles.slogan}>
-              {/* <div>You Are<br/>What You EAT</div> */}
               <div>
                 健康食分
                 <br />
@@ -230,7 +159,7 @@ const Home = () => {
               customLeftArrow={<CustomLeftArrow />}
               customRightArrow={<CustomRightArrow />}
             >
-              {breakfast.map((recipe, index) => {
+              {breakfast.map((recipe) => {
                 return (
                   <div className={styles.recipe} key={recipe.id}>
                     <Link to={`/recipes/${recipe.id}`}>
@@ -264,7 +193,7 @@ const Home = () => {
               customLeftArrow={<CustomLeftArrow />}
               customRightArrow={<CustomRightArrow />}
             >
-              {dessert.map((recipe, index) => {
+              {dessert.map((recipe) => {
                 return (
                   <div className={styles.recipe} key={recipe.id}>
                     <Link to={`/recipes/${recipe.id}`}>
@@ -300,7 +229,7 @@ const Home = () => {
               customLeftArrow={<CustomLeftArrow />}
               customRightArrow={<CustomRightArrow />}
             >
-              {dinner.map((recipe, index) => {
+              {dinner.map((recipe) => {
                 return (
                   <div className={styles.recipe} key={recipe.id}>
                     <Link to={`/recipes/${recipe.id}`}>
@@ -343,24 +272,6 @@ const Home = () => {
       </div>
     </div>
   );
-};
-
-const CustomRightArrow = ({ onClick, ...rest }) => {
-  // const {
-  //   onMove,
-  //   carouselState: { currentSlide, deviceType }
-  // } = rest;
-  // onMove means if dragging or swiping in progress.
-  return <button onClick={() => onClick()} className={styles.rightArrow} />;
-};
-
-const CustomLeftArrow = ({ onClick, ...rest }) => {
-  // const {
-  //   onMove,
-  //   carouselState: { currentSlide, deviceType }
-  // } = rest;
-  // onMove means if dragging or swiping in progress.
-  return <button onClick={() => onClick()} className={styles.leftArrow} />;
 };
 
 export default Home;

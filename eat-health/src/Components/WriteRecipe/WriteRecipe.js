@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react";
-import firebase from "firebase/app";
-import { db, storage } from "../../firebase";
 import Select from "react-select";
 import { useHistory } from "react-router-dom";
 
-import UploadImage from "../UploadImage/UploadImage";
+import { uploadImageToStorage, postRecipe } from "../../utils/firebase";
+import styles from "./WriteRecipe.module.scss";
+import tipsBulb from "../../images/tips-bulb.svg";
+import defaultImg from "../../images/upload.png";
+
+import UploadCoverPhoto from "../UploadCoverPhoto/UploadCoverPhoto";
 import Ingredients from "../Ingredients/Ingredients";
 import Steps from "../Steps/Steps";
 import Loading from "../Loading/Loading";
 import Modal from "../Modal/Modal";
 import Alert from "../Alert/Alert";
-import styles from "./WriteRecipe.module.scss";
-import foodDatabase from "../../foodDatabase.json";
-import tipsBulb from "../../images/tips-bulb.svg";
-import defaultImg from "../../images/upload.png";
 
 // react-select options
-// const options = foodDatabase.foods.map(food => ({ value: food.id, label: food.name, ...food }));
 const recipeType = [
   { value: 0, label: "均衡料理", name: "category" },
   { value: 1, label: "減醣料理", name: "category" },
@@ -114,19 +112,19 @@ const WriteRecipe = ({ user }) => {
       file: null,
     },
   ]);
-  const [file, setFile] = useState(null); // 上傳到storage的主圖
-  const [url, setUrl] = useState(null); // 從storage取得的url
+  const [coverPhoto, setCoverPhoto] = useState(null);
+  const [coverPhotoUrl, setCoverPhotoUrl] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [showCancelModal, setShowCancelModal] = useState(false); // 確認取消modal
-  const [showPostModal, setShowPostModal] = useState(false); // 確認發布modal
-  const [showAlert, setShowAlert] = useState(false); // 警告視窗
-  const [alertText, setAlertText] = useState(""); // 警告視窗文字
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showPostModal, setShowPostModal] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertText, setAlertText] = useState("");
 
   useEffect(() => {
-    if (url) {
+    if (coverPhotoUrl) {
       postRecipe();
     }
-  }, [url]);
+  }, [coverPhotoUrl]);
 
   const handleInputChange = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -136,8 +134,8 @@ const WriteRecipe = ({ user }) => {
     setInputs({ ...inputs, [select.name]: select.label });
   };
 
-  const checkInput = () => {
-    let {
+  const checkInputs = () => {
+    const {
       title,
       category,
       mealTime,
@@ -155,7 +153,7 @@ const WriteRecipe = ({ user }) => {
     } else if (mealTime.trim().length === 0) {
       setAlertText("請選擇適合時間");
       toggleAlert();
-    } else if (!file) {
+    } else if (!coverPhoto) {
       setAlertText("請上傳食譜封面照片");
       toggleAlert();
     } else if (summary.trim().length === 0) {
@@ -187,19 +185,17 @@ const WriteRecipe = ({ user }) => {
     }
   };
 
-  const uploadImage = () => {
+  const updateImagesUrltoState = () => {
     setIsLoading(true);
     let promises = [];
-    // 上傳每步驟的照片到storage > 得到url > setSteps
     steps.forEach((step) => {
       if (step.file) {
         promises = [
           ...promises,
-          storage
-            .ref(`/recipeImages/${new Date().getTime()}-${step.file.name}`)
-            .put(step.file)
-            .then((snapshot) => snapshot.ref.getDownloadURL())
-            .then((downloadURL) => {
+          uploadImageToStorage(
+            `/recipeImages/${new Date().getTime()}-${step.file.name}`,
+            step.file,
+            (downloadURL) => {
               setSteps((prevSteps) =>
                 prevSteps.map((prevStep) => {
                   if (prevStep.uid === step.uid) {
@@ -208,45 +204,43 @@ const WriteRecipe = ({ user }) => {
                   return prevStep;
                 })
               );
-            }),
+            }
+          ),
         ];
       }
     });
-    // 上傳主圖到storage > 得到url > setUrl > useEffect觸發postRecipe
+
     Promise.all(promises).then((response) => {
-      storage
-        .ref(`/recipeImages/${new Date().getTime()}-${file.name}`)
-        .put(file)
-        .then((snapshot) => snapshot.ref.getDownloadURL())
-        .then((downloadURL) => {
-          setUrl(downloadURL);
-        });
+      uploadImageToStorage(
+        `/recipeImages/${new Date().getTime()}-${coverPhoto.name}`,
+        coverPhoto,
+        (downloadURL) => {
+          setCoverPhotoUrl(downloadURL);
+        }
+      );
     });
   };
 
   const postRecipe = () => {
-    let newSteps = steps.map((step) => {
+    const { title, category, mealTime, summary, portion, cookTime } = inputs;
+    const newSteps = steps.map((step) => {
       return {
         uid: step.uid,
         imageUrl: step.imageUrl,
         text: step.text,
       };
     });
-    // 上傳最新的state到firestore
-    let recipe = db.collection("recipes").doc();
-    recipe.set({
-      title: inputs.title,
-      category: inputs.category,
-      mealTime: inputs.mealTime,
-      summary: inputs.summary,
-      portion: inputs.portion,
-      cookTime: inputs.cookTime,
+    postRecipe({
+      title,
+      category,
+      mealTime,
+      summary,
+      portion,
+      cookTime,
       steps: newSteps,
       tips: inputs.tips,
-      id: recipe.id,
-      image: url,
+      image: coverPhotoUrl,
       ingredients,
-      createdTime: firebase.firestore.FieldValue.serverTimestamp(),
       authorId: user.uid,
       authorPhotoURL: user.photoURL,
       authorName: user.displayName,
@@ -255,23 +249,22 @@ const WriteRecipe = ({ user }) => {
     history.push(`/profile/${user.uid}/myRecipes`);
   };
 
-  // 開啟/關閉取消modal
   const toggleCanceling = () => {
     setShowCancelModal(!showCancelModal);
   };
-  // 取消modal點擊確認
+
   const confirmCancel = () => {
     history.push(`/profile/${user.uid}/myRecipes`);
   };
-  // 開啟/關閉發布modal
+
   const togglePosting = () => {
     setShowPostModal(!showPostModal);
   };
-  // 發布modal點擊確認
+
   const confirmPost = () => {
-    uploadImage();
+    updateImagesUrltoState();
   };
-  // alert點擊確認
+
   const toggleAlert = () => {
     setShowAlert(!showAlert);
   };
@@ -313,7 +306,7 @@ const WriteRecipe = ({ user }) => {
               />
             </div>
           </div>
-          <UploadImage file={file} setFile={setFile} />
+          <UploadCoverPhoto setCoverPhoto={setCoverPhoto} />
           <div>
             <div className={styles.text}>簡介</div>
             <textarea
@@ -346,7 +339,6 @@ const WriteRecipe = ({ user }) => {
             </div>
           </div>
           <Ingredients
-            // options={options}
             ingredients={ingredients}
             setIngredients={setIngredients}
           />
@@ -364,7 +356,7 @@ const WriteRecipe = ({ user }) => {
             ></textarea>
           </div>
           <div className={styles.flex}>
-            <button className={styles.fullBtn} onClick={checkInput}>
+            <button className={styles.fullBtn} onClick={checkInputs}>
               發布食譜
             </button>
             <button className={styles.lineBtn} onClick={toggleCanceling}>

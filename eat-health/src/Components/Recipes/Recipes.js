@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink, Switch } from "react-router-dom";
 
 import styles from "./Recipes.module.scss";
+
 import RecipeList from "../RecipeList/RecipeList";
 import CategoryBox from "../CategoryBox/CategoryBox";
 
@@ -11,7 +12,6 @@ const Recipes = () => {
   let urlParams = new URLSearchParams(window.location.search);
   let category = urlParams.get("category");
   let mealTime = urlParams.get("mealTime");
-  console.log(mealTime);
 
   useEffect(() => {
     switch (category) {
