@@ -1,65 +1,79 @@
 .categoryContainer {
-    width: 400px;
-    min-height: 100px;
-    background-color: #fff;
-    border: 1px solid #e4e6e9;
-    margin-left: 20px;
-    padding: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    
-    .title {
-        border-bottom: 1px solid #e4e6e9;
-        padding-bottom: 10px;
-        margin-bottom: 10px;
+  width: 400px;
+  min-width: 400px;
+  min-height: 100px;
+  background-color: #fff;
+  border: 1px solid #e4e6e9;
+  // margin-left: 20px;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
+
+  .title {
+    border-bottom: 1px solid #e4e6e9;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+  .categories {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    .category {
+      height: 100px;
+      background-color: #e4e6e9;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 5px;
+      position: relative;
+      .text {
+        color: #ffffff;
+        font-size: 1.2em;
+        letter-spacing: 1px;
+        z-index: 100;
+      }
     }
-    .categories {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-column-gap: 10px;
-        grid-row-gap: 10px;
-        .category {
-            height: 100px;
-            background-color: #e4e6e9;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 5px;
-            position: relative;
-            .text {
-                color: #ffffff;
-                font-size: 1.2em;
-                letter-spacing: 1px;
-                z-index: 100;
-            }
-        }
-        .category::after {
-            content: "";
-            width: 100%;
-            height: 100%;
-            background-color: #00000049;
-            position: absolute;
-            top: 0;
-            left: 0;
-            transition: all .2s;
-        }
-        .category:hover::after {
-            background-color: #00000010;
-        }
-        .all {
-            background-image: url("../../images/category-all.jpg");
-        }
-        .lowcarbs {
-            background-image: url("../../images/category-lowcarbs.jpg");
-        }
-        .highpt {
-            background-image: url("../../images/category-highpt.jpg");
-        }
-        .balanced {
-            background-image: url("../../images/category-balanced.jpg");
-        }
+    .category::after {
+      content: "";
+      width: 100%;
+      height: 100%;
+      background-color: #00000049;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: all 0.2s;
+      border-radius: 5px;
     }
+    .category:hover::after {
+      background-color: #00000010;
+    }
+    .all {
+      background-image: url("../../images/category-all.jpg");
+    }
+    .lowcarbs {
+      background-image: url("../../images/category-lowcarbs.jpg");
+    }
+    .highpt {
+      background-image: url("../../images/category-highpt.jpg");
+    }
+    .balanced {
+      background-image: url("../../images/category-balanced.jpg");
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .categoryContainer {
+    width: 350px;
+  }
+}
+@media (max-width: 800px) {
+  .categoryContainer {
+    margin: 0;
+    width: 100%;
+  }
 }

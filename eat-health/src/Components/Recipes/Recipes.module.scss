@@ -1,68 +1,136 @@
+.recipesContainer {
+  margin-bottom: 100px;
+}
 .banner {
-    width: 100%;
-    height: 200px;
-    background-color: #fdf1de;
-    background-image: url("../../images/banner-pattern-04.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    font-size: 36px;
-    font-weight: bold;
-    letter-spacing: 8px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    
-    .categoryEnglish {
-        font-size: 0.8em;
-        letter-spacing: 0.5px;
-        text-shadow: 3px 3px 0px #fec740;
-    }
+  width: 100%;
+  height: 200px;
+  background-color: #fdf1de;
+  background-image: url("../../images/banner-pattern-04.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  font-size: 36px;
+  font-weight: bold;
+  letter-spacing: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .categoryEnglish {
+    font-size: 0.8em;
+    letter-spacing: 0.5px;
+    text-shadow: 3px 3px 0px #fec740;
+  }
 }
 
-
 .container {
-    // max-width: 1200px;
-    width: 95%;
-    margin: 30px auto 0 auto;
-    .category {
-        font-size: 24px;
-        font-weight: bold;
-        margin-left: 20%;
-        margin-bottom: 20px;
-        mark {
-            display: inline-block;
-            line-height: 0em;
-            padding-bottom: 0.8em;
-            background-color: #fec740;
-        }
-    }
-    .main {
+  width: 80%;
+  margin: 30px auto 0 auto;
+
+  .main {
     display: flex;
     align-items: flex-start;
-    flex-wrap: wrap;
-        .mealTime {
-            background-color: #ffffff;
-            margin-right: 20px;
-            border: 1px solid #e4e6e9;
-            color: #3f3d56;
-            font-weight: bold;
-            font-size: 18px;
-            width: 15%;
-            a {
-                display: inline-block;
-                width: 100%;
-                height: 100%;
-                padding: 25px 40px;
-                letter-spacing: 1px;
-            }
-            a:hover, a:focus {
-                background-color: #dddddd;
-                // background-color: #3f3d56;
-                // color: #ffffff;
-            }
+
+    .recipes {
+      flex: auto;
+      margin-right: 20px;
+      .mealTime {
+        background-color: #fcfcfc;
+        border: 1px solid #e4e6e9;
+        font-weight: bold;
+        font-size: 18px;
+        display: flex;
+        margin-bottom: -3px;
+        a {
+          padding: 20px 40px;
+          letter-spacing: 1px;
+          color: #808080;
+          font-weight: normal;
         }
+        .mealTimeActive {
+          border-right: 1px solid #e4e6e9;
+          border-left: 1px solid #e4e6e9;
+          border-bottom: 3px solid #ffffff;
+          border-top: 5px solid #85bf3e;
+          background-color: #ffffff;
+          color: #3f3d56;
+          font-weight: bold;
+          border-radius: 5px 5px 0 0;
+        }
+      }
     }
+  }
+}
+
+@media (max-width: 1300px) {
+  .container {
+    width: 90%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .container {
+    .main {
+      .recipes {
+        .mealTime {
+          a {
+            padding: 20px;
+          }
+        }
+      }
+    }
+  }
+}
+@media (max-width: 800px) {
+  .container {
+    .main {
+      flex-direction: column;
+      .recipes {
+        margin-bottom: 30px;
+      }
+    }
+  }
+}
+@media (max-width: 450px) {
+  .container {
+    .main {
+      .recipes {
+        .mealTime {
+          a {
+            font-size: 16px;
+            padding: 20px 10px;
+          }
+        }
+      }
+    }
+  }
+}
+@media (max-width: 350px) {
+  .container {
+    .main {
+      .recipes {
+        .mealTime {
+          a {
+            font-size: 14px;
+            padding: 10px 10px;
+          }
+        }
+      }
+    }
+  }
+}
+@media (max-width: 320px) {
+  .container {
+    .main {
+      .recipes {
+        .mealTime {
+          a {
+            padding: 10px 8px;
+          }
+        }
+      }
+    }
+  }
 }

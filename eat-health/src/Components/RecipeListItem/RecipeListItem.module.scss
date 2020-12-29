@@ -1,48 +1,107 @@
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .recipe {
+  display: flex;
+  padding: 20px;
+  animation: fadein 0.5s;
+
+  .image {
+    width: 200px;
+    height: 150px;
+    margin-right: 20px;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  .content {
     display: flex;
-    padding: 20px;
+    flex-direction: column;
+    .title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #3f3d56;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      word-break: break-all;
+    }
+    .author {
+      color: #808080;
+      margin-bottom: 15px;
+    }
+    .likeComment {
+      display: flex;
+      margin-top: auto;
+      .text {
+        margin-left: 5px;
+      }
+    }
+    .likeComment > div {
+      margin-right: 20px;
+    }
+    small {
+      border: 1px solid #85bf3e;
+      border-radius: 30px;
+      color: #85bf3e;
+      padding: 5px;
+      margin-right: 5px;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .recipe {
+    padding: 15px;
     .image {
-        width: 200px;
-        height: 150px;
-        margin-right: 20px;
-        overflow: hidden;
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+      width: 150px;
     }
-    .content{
-        display: flex;
-        flex-direction: column;
-        .title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #3f3d56;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-            word-break: break-all;
-        }
-        .author {
-            color: #808080;
-            margin-bottom: 15px;
-        }
-        .likeComment {
-            display: flex;
-            margin-top: auto;
-            .text {
-                margin-left: 5px;
-            }
-        }
-        .likeComment > div {
-            margin-right: 20px;
-        }
-        small {
-            border: 1px solid #85bf3e;
-            border-radius: 30px;
-            color: #85bf3e;
-            padding: 5px;
-            margin-right: 5px;
-        }
+    .content {
+      font-size: 16px;
+      .title {
+        font-size: 18px;
+      }
     }
+  }
+}
+@media (max-width: 450px) {
+  .recipe {
+    .image {
+      width: 120px;
+      height: 120px;
+    }
+    .content {
+      font-size: 14px;
+      .title {
+        font-size: 16px;
+      }
+    }
+  }
+}
+@media (max-width: 400px) {
+  .recipe {
+    .content {
+      width: 60%;
+      .likeComment > div {
+        margin-right: 5px;
+      }
+    }
+  }
+}
+@media (max-width: 320px) {
+  .recipe {
+    .content {
+      .likeComment > div {
+        font-size: 12px;
+      }
+    }
+  }
 }

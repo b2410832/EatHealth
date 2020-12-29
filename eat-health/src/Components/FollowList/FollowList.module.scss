@@ -1,89 +1,124 @@
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .followListContainer {
-    border: 1px solid #e4e6e9;
-    padding: 20px;
-    min-height: 300px;
-    .noFollowList {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .noFollowImage {
-            width: 30%;
-            img {
-                width: 100%;
-            }
-        }
-        .text {
-            width: 50%;
-            .title {
-                font-weight: bold;
-                font-size: 18px;
-            }
-        }
+  border: 1px solid #e4e6e9;
+  padding: 20px;
+  min-height: 300px;
+  animation: fadein 0.2s;
+  .noFollowList {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fcf5ea;
+    .noFollowImage {
+      width: 20%;
+      margin-right: 30px;
+      img {
+        width: 100%;
+      }
     }
-    .follow {
-        display: flex;
-        align-items: center;
-        .user {
-            display: flex;
-
-            .image {
-                width: 60px;
-                height: 60px;
-                margin-right: 10px;
-                img {
-                    width: 100%;
-                    clip-path: circle(50%);
-                }
-            }
-            .info {
-                display: flex;
-                flex-direction: column;
-                justify-content: space-around;
-                .name {
-                    font-weight: bold;
-                    font-size: 18px;
-                }
-                .details {
-                    display: flex;
-                    color: #808080;
-                    .fans {
-                        margin-right: 10px;
-                    }
-                    .recipes {
-
-                    }
-                }
-            }
-        }
-        .followBtn {
-            margin-left: auto;
-        }
-    }
-    .follow:not(:last-child) {
-        margin-bottom: 20px;
-    }
-    .greyBtn {
+    .text {
+      width: 50%;
+      font-size: 18px;
+      .title {
+        font-weight: bold;
+        font-size: 1.2em;
+        margin-bottom: 10px;
+      }
+      .description {
+        color: #808080;
+        font-size: 1em;
+        margin-bottom: 10px;
+        line-height: 1.5em;
+      }
+      .fullBtn {
         border: none;
-        background-color: #e4e6e9;
-        color: #8a949f;
-        border-radius: 5px;
-        outline: none;
-        cursor: pointer;
-        font-size: 16px;
-        width: 100px;
-        height: 40px;
-        margin-left: auto;
-    }
-    .darkBtn {
-        border: none;
-        background-color: #05172c;
+        background-color: #85bf3e;
         color: #ffffff;
+        padding: 5px 10px;
         border-radius: 5px;
+        border: 1px solid #85bf3e;
         outline: none;
         cursor: pointer;
+        margin-right: 30px;
+        transition: all 0.2s;
         font-size: 16px;
-        width: 80px;
-        height: 40px;
-        margin-left: auto;
+
+        &:hover {
+          background-color: #72a534;
+        }
+      }
     }
+  }
+  .follow {
+    display: flex;
+    align-items: center;
+    .user {
+      display: flex;
+
+      .image {
+        width: 60px;
+        height: 60px;
+        margin-right: 10px;
+        img {
+          width: 100%;
+          clip-path: circle(50%);
+        }
+      }
+      .info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        .name {
+          font-weight: bold;
+          font-size: 18px;
+        }
+        .details {
+          display: flex;
+          color: #808080;
+          .fans {
+            margin-right: 10px;
+          }
+          .recipes {
+          }
+        }
+      }
+    }
+    .followBtn {
+      margin-left: auto;
+    }
+  }
+  .follow:not(:last-child) {
+    margin-bottom: 20px;
+  }
+  .greyBtn {
+    border: none;
+    background-color: #e4e6e9;
+    color: #8a949f;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100px;
+    height: 40px;
+    margin-left: auto;
+  }
+  .darkBtn {
+    border: none;
+    background-color: #05172c;
+    color: #ffffff;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    font-size: 16px;
+    width: 80px;
+    height: 40px;
+    margin-left: auto;
+  }
 }

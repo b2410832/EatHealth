@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { auth, db } from './firebase';
+import { auth, db } from "./firebase";
 
-import Header from './Components/Header/Header';
-import WriteRecipe from './Components/WriteRecipe/WriteRecipe';
-import Footer from './Components/Footer/Footer';
+import Header from "./Components/Header/Header";
+import WriteRecipe from "./Components/WriteRecipe/WriteRecipe";
+import Footer from "./Components/Footer/Footer";
 import Home from "./Components/Home/Home";
 import SignUp from "./Components/SignUp/SignUp";
 import LogIn from "./Components/LogIn/LogIn";
@@ -15,57 +15,69 @@ import Loading from "./Components/Loading/Loading";
 import PrivateRoute from "./PrivateRoute";
 import styles from "./App.module.scss";
 
-
 const App = () => {
-  const [ user, setUser ] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    auth.onAuthStateChanged(function(user) {
+    auth.onAuthStateChanged(function (user) {
       if (user) {
-          // console.log("user",auth.currentUser);
-          // setUser(auth.currentUser);
+        // console.log("user",auth.currentUser);
+        // setUser(auth.currentUser);
         console.log("user", user);
-        db.collection("users").doc(user.uid).onSnapshot(snapshot => {
-          let data = snapshot.data();
-          if(data) {
-            console.log("snapshot", snapshot.data());
-            setUser({
-              uid: data.userId,
-              photoURL: data.photoURL,
-              displayName: data.displayName,
-              email: data.email,
-            });
-          }
-        })
+        db.collection("users")
+          .doc(user.uid)
+          .onSnapshot((snapshot) => {
+            let data = snapshot.data();
+            if (data) {
+              console.log("snapshot", snapshot.data());
+              setUser({
+                uid: data.userId,
+                photoURL: data.photoURL,
+                displayName: data.displayName,
+                email: data.email,
+              });
+            }
+          });
       } else {
         setUser(false);
       }
     });
   }, []);
-  
-  if(user === null) {
-    return (
-      <Loading />
-    )
+
+  if (user === null) {
+    return <Loading />;
   } else {
     return (
-        <div className={styles.container}>
-          <div className={styles.content}>
-            <Header user={user}/>
-            <div className={styles.margin}></div>
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <PrivateRoute path="/writeRecipe" component={WriteRecipe} user={user} />
-              <Route path="/signup" render={() => <SignUp setUser={setUser} user={user}/>} />
-              <Route path="/login" render={() => <LogIn setUser={setUser}/>}/>
-              <Route exact path="/recipes" render={() => <Recipes />}/>
-              <Route path="/recipes/:recipeId" render={({ match }) => <Recipe user={user} match={match}/>}></Route>
-              <Route path="/profile/:userId" render={() => <Profile user={user}/>}></Route>
-            </Switch>
-          </div>
-          {/* <Footer /> */}
+      <div className={styles.container}>
+        <div className={styles.content}>
+          <Header user={user} />
+          <div className={styles.margin}></div>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <PrivateRoute
+              path="/writeRecipe"
+              component={WriteRecipe}
+              user={user}
+            />
+            <Route
+              path="/signup"
+              render={() => <SignUp setUser={setUser} user={user} />}
+            />
+            <Route path="/login" render={() => <LogIn setUser={setUser} />} />
+            <Route exact path="/recipes" render={() => <Recipes />} />
+            <Route
+              path="/recipes/:recipeId"
+              render={({ match }) => <Recipe user={user} match={match} />}
+            ></Route>
+            <Route
+              path="/profile/:userId"
+              render={() => <Profile user={user} />}
+            ></Route>
+          </Switch>
         </div>
+        <Footer />
+      </div>
     );
   }
-}
+};
 export default App;
