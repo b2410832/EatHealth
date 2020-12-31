@@ -1,18 +1,13 @@
 import { useEffect, useState } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./FollowList.module.scss";
-import { db } from "../../utils/firebase";
+import { db, toggleFollowing, getUser } from "../../utils/firebase";
 import image from "../../images/noFollowing.png";
 
-const FollowList = ({
-  followings,
-  user,
-  gotFollowingsData,
-  setGotFollowingsData,
-}) => {
+const FollowList = ({ followings, user, gotFollowingsData }) => {
   const [followingList, setFollowingList] = useState([]);
 
   let history = useHistory();
@@ -21,18 +16,13 @@ const FollowList = ({
     let newFollowingList = [];
     followings.forEach((followingId) => {
       // 取得每個追蹤者的基本資訊
-      db.collection("users")
-        .doc(followingId)
-        .get()
-        .then((doc) => {
-          const { userId, displayName, photoURL } = doc.data();
-          newFollowingList = [
-            ...newFollowingList,
-            { userId, displayName, photoURL, isFollowing: true },
-          ]; //
-          setFollowingList(newFollowingList);
-          // setGotData(true); //
-        });
+      getUser(followingId).then((user) => {
+        const { userId, displayName, photoURL } = user.data();
+        newFollowingList = [
+          ...newFollowingList,
+          { userId, displayName, photoURL, isFollowing: true },
+        ];
+      });
       // 取得每個追蹤者的食譜數
       db.collection("recipes")
         .where("authorId", "==", followingId)
@@ -77,54 +67,10 @@ const FollowList = ({
     });
   }, [followings]);
 
-  const toggleFollowing = (index) => {
-    setFollowingList(
-      followingList.map((item) => {
-        if (item.userId === index) {
-          return { ...item, isFollowing: !item.isFollowing };
-        }
-        return item;
-      })
-    );
+  const handleToggleFollowing = (followId) => {
     followingList.forEach((item) => {
-      if (item.userId === index) {
-        db.collection("users")
-          .doc(user.uid)
-          .collection("followings")
-          .doc(index)
-          .get()
-          .then((doc) => {
-            doc.data()
-              ? db
-                  .collection("users")
-                  .doc(user.uid)
-                  .collection("followings")
-                  .doc(index)
-                  .delete()
-                  .then(() =>
-                    db
-                      .collection("users")
-                      .doc(index)
-                      .collection("fans")
-                      .doc(user.uid)
-                      .delete()
-                  )
-              : db
-                  .collection("users")
-                  .doc(user.uid)
-                  .collection("followings")
-                  .doc(index)
-                  .set({ followingId: index })
-                  .then(() =>
-                    db
-                      .collection("users")
-                      .doc(index)
-                      .collection("fans")
-                      .doc(user.uid)
-                      .set({ fanId: user.uid })
-                  );
-          })
-          .catch((err) => console.log(err));
+      if (item.userId === followId) {
+        toggleFollowing(user.uid, followId);
       }
     });
   };
@@ -179,7 +125,7 @@ const FollowList = ({
                   {following.isFollowing ? (
                     <button
                       className={styles.greyBtn}
-                      onClick={() => toggleFollowing(following.userId)}
+                      onClick={() => handleToggleFollowing(following.userId)}
                     >
                       <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>
                       &nbsp;已追蹤
@@ -187,7 +133,7 @@ const FollowList = ({
                   ) : (
                     <button
                       className={styles.darkBtn}
-                      onClick={() => toggleFollowing(following.userId)}
+                      onClick={() => handleToggleFollowing(following.userId)}
                     >
                       追蹤
                     </button>

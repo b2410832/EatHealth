@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import {
-  BrowserRouter as Router,
   Switch,
   Route,
   useRouteMatch,
-  useHistory,
   NavLink,
   useParams,
 } from "react-router-dom";
@@ -14,7 +12,13 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import styles from "./Profile.module.scss";
 import SubProfile from "../SubProfile/SubProfile";
 
-import { db } from "../../utils/firebase";
+import {
+  toggleFollowing,
+  getUser,
+  getUserRecipe,
+  getRealtimeFans,
+  getRealtimeFollowings,
+} from "../../utils/firebase";
 
 const Profile = ({ user }) => {
   const [profile, setProfile] = useState({});
@@ -28,96 +32,43 @@ const Profile = ({ user }) => {
   const { userId } = useParams();
 
   useEffect(() => {
-    setGotFollowingsData(false); //
-    // 取得基本資訊
-    db.collection("users")
-      .doc(userId)
-      .get()
-      .then((doc) => {
-        const user = doc.data();
-        setProfile(user);
-      });
-    // 取得寫的食譜數量
-    db.collection("recipes")
-      .where("authorId", "==", userId)
-      .get()
-      .then((docs) => {
-        setRecipes(docs.size);
-      });
-    // 取得粉絲數量
-    db.collection("users")
-      .doc(userId)
-      .collection("fans")
-      .onSnapshot((snapshots) => {
-        setFans(snapshots.size);
-      });
+    setGotFollowingsData(false);
+
+    getUser(userId).then((userDoc) => {
+      const user = userDoc.data();
+      setProfile(user);
+    });
+    getUserRecipe(userId).then((recipeDocs) => {
+      setRecipes(recipeDocs.size);
+    });
+    getRealtimeFans(userId, (fans) => {
+      setFans(fans.size);
+    });
     // 取得追蹤中使用者id
-    db.collection("users")
-      .doc(userId)
-      .collection("followings")
-      .get()
-      .then((docs) => {
-        let followingList = [];
-        docs.forEach((doc) => {
-          followingList = [...followingList, doc.data().followingId];
-        });
-        setFollowings(followingList);
-        setGotFollowingsData(true); //
+    getRealtimeFollowings(userId, (followings) => {
+      let followingList = [];
+      followings.forEach((following) => {
+        followingList = [...followingList, following.data().followingId];
       });
+      setFollowings(followingList);
+      setGotFollowingsData(true);
+    });
     // 取得使用者是否正在追蹤此人
     if (user && user.uid !== userId) {
-      db.collection("users")
-        .doc(user.uid)
-        .collection("followings")
-        .onSnapshot((snapshot) => {
-          snapshot.docs.forEach((doc) => {
-            if (doc.id === userId) {
-              setIsFollowing(true);
-            }
-          });
+      getRealtimeFollowings(user.uid, (followings) => {
+        followings.forEach((following) => {
+          setIsFollowing(false); //
+          if (following.id === userId) {
+            setIsFollowing(true);
+          }
         });
+      });
     }
   }, [userId]);
 
-  const toggleFollowing = () => {
+  const handleToggleFollowing = () => {
     setIsFollowing(!isFollowing);
-    db.collection("users")
-      .doc(user.uid)
-      .collection("followings")
-      .doc(userId)
-      .get()
-      .then((doc) => {
-        doc.data()
-          ? db
-              .collection("users")
-              .doc(user.uid)
-              .collection("followings")
-              .doc(userId)
-              .delete()
-              .then(() =>
-                db
-                  .collection("users")
-                  .doc(userId)
-                  .collection("fans")
-                  .doc(user.uid)
-                  .delete()
-              )
-          : db
-              .collection("users")
-              .doc(user.uid)
-              .collection("followings")
-              .doc(userId)
-              .set({ followingId: userId })
-              .then(() =>
-                db
-                  .collection("users")
-                  .doc(userId)
-                  .collection("fans")
-                  .doc(user.uid)
-                  .set({ fanId: user.uid })
-              );
-      })
-      .catch((err) => console.log(err));
+    toggleFollowing(user.uid, userId);
   };
 
   return (
@@ -134,11 +85,17 @@ const Profile = ({ user }) => {
           {user &&
             user.uid !== userId &&
             (isFollowing ? (
-              <button className={styles.greyBtn} onClick={toggleFollowing}>
+              <button
+                className={styles.greyBtn}
+                onClick={handleToggleFollowing}
+              >
                 <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>&nbsp;已追蹤
               </button>
             ) : (
-              <button className={styles.darkBtn} onClick={toggleFollowing}>
+              <button
+                className={styles.darkBtn}
+                onClick={handleToggleFollowing}
+              >
                 追蹤
               </button>
             ))}

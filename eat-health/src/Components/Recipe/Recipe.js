@@ -12,14 +12,27 @@ import {
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { db } from "../../utils/firebase";
+import {
+  toggleFollowing,
+  toggleFavorite,
+  toggleLiked,
+  getRealtimeRecipe,
+  getRealtimeFans,
+  getRealtimeRecipeLikes,
+  updateRecipe,
+  getRealtimeRecipeComments,
+  getRealtimeIsLiked,
+  getRealtimeIsFavorite,
+  getRealtimeFollowings,
+} from "../../utils/firebase";
+import styles from "./Recipe.module.scss";
+import tipsBulb from "../../images/tips-bulb.svg";
+
 import Chart from "../Chart/Chart";
 import Comments from "../Comments/Comments";
 import CategoryBox from "../CategoryBox/CategoryBox";
 import RecommendedBox from "../RecommendedBox/RecommendedBox";
 import Alert from "../Alert/Alert";
-import styles from "./Recipe.module.scss";
-import tipsBulb from "../../images/tips-bulb.svg";
 
 const Recipe = ({ user }) => {
   let { recipeId } = useParams();
@@ -42,6 +55,41 @@ const Recipe = ({ user }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertText, setAlertText] = useState("");
 
+  const sumNutritionQty = (ingredients, nutrient) => {
+    return Math.round(
+      ingredients.reduce((total, ingredient) => {
+        return ingredient[nutrient] * (ingredient.qty / 100) + total;
+      }, 0)
+    );
+  };
+
+  const countNutritionPercentage = (
+    nutrientQty,
+    totalCalories,
+    caloriesPerGram
+  ) => {
+    return Math.round(((nutrientQty * caloriesPerGram) / totalCalories) * 100);
+  };
+
+  const countNutritionalFacts = (ingredients) => {
+    const calories = sumNutritionQty(ingredients, "calorie");
+    const carbsQty = sumNutritionQty(ingredients, "carb");
+    const proteinQty = sumNutritionQty(ingredients, "protein");
+    const fatQty = sumNutritionQty(ingredients, "fat");
+    const proteinPercentage = countNutritionPercentage(proteinQty, calories, 4);
+    const fatPercentage = countNutritionPercentage(fatQty, calories, 9);
+    const carbsPercentage = 100 - (proteinPercentage + fatPercentage);
+    return {
+      calories,
+      carbsQty,
+      proteinQty,
+      fatQty,
+      proteinPercentage,
+      fatPercentage,
+      carbsPercentage,
+    };
+  };
+
   useEffect(() => {
     setNutrition({
       calories: 0,
@@ -56,224 +104,82 @@ const Recipe = ({ user }) => {
     setIsAdded(false);
     setIsfollowing(false);
     setIsMyself(false);
-    // 更新食譜資料
-    db.collection("recipes")
-      .doc(recipeId)
-      .onSnapshot((doc) => {
-        if (doc.exists) {
-          let recipe = doc.data();
-          setRecipe(recipe);
-          // 計算食譜熱量和營養素
-          let calories = Math.round(
-            recipe.ingredients.reduce((totalCalorie, item) => {
-              return item.calorie * (item.qty / 100) + totalCalorie;
-            }, 0)
-          );
-          let carbsQty = Math.round(
-            recipe.ingredients.reduce((totalCarbs, item) => {
-              return item.carb * (item.qty / 100) + totalCarbs;
-            }, 0)
-          );
-          let proteinQty = Math.round(
-            recipe.ingredients.reduce((totalProteins, item) => {
-              return item.protein * (item.qty / 100) + totalProteins;
-            }, 0)
-          );
-          let fatQty = Math.round(
-            recipe.ingredients.reduce((totalFats, item) => {
-              return item.fat * (item.qty / 100) + totalFats;
-            }, 0)
-          );
-          let proteinPercentage = Math.round(
-            ((proteinQty * 4) / calories) * 100
-          );
-          let fatPercentage = Math.round(((fatQty * 9) / calories) * 100);
-          let carbsPercentage = 100 - (proteinPercentage + fatPercentage);
-          setNutrition({
-            calories,
-            carbsQty,
-            proteinQty,
-            fatQty,
-            proteinPercentage,
-            fatPercentage,
-            carbsPercentage,
-          });
-          // 取得食譜作者的粉絲數
-          db.collection("users")
-            .doc(recipe.authorId)
-            .collection("fans")
-            .onSnapshot((snapshots) => {
-              setAuthorFans(snapshots.size);
-            });
-          // 取得此食譜的讚數 //
-          db.collectionGroup("liked")
-            .where("recipeId", "==", recipe.id)
-            .onSnapshot((snapshots) => {
-              db.collection("recipes")
-                .doc(recipe.id)
-                .update({ liked: snapshots.docs.length });
-            });
-          // 取得此食譜的留言數 //
-          db.collection("recipes")
-            .doc(recipe.id)
-            .collection("comments")
-            .onSnapshot((snapshots) => {
-              db.collection("recipes")
-                .doc(recipe.id)
-                .update({ comments: snapshots.docs.length });
-            });
-          // 此使用者是否按過這個食譜讚&收藏過&追蹤此作者
-          if (user) {
-            // 按讚
-            db.collection("users")
-              .doc(user.uid)
-              .collection("liked")
-              .onSnapshot((snapshot) => {
-                setIsLiked(false); //
-                snapshot.docs.forEach((doc) => {
-                  if (doc.id === recipeId) {
-                    return setIsLiked(true);
-                  }
-                });
-              });
-            // 收藏
-            db.collection("users")
-              .doc(user.uid)
-              .collection("favorites")
-              .onSnapshot((snapshot) => {
-                setIsAdded(false); //
-                snapshot.docs.forEach((doc) => {
-                  if (doc.id === recipeId) {
-                    return setIsAdded(true);
-                  }
-                });
-              });
 
-            if (user.uid === recipe.authorId) {
-              setIsMyself(true);
-            } else {
-              // 追蹤
-              db.collection("users")
-                .doc(user.uid)
-                .collection("followings")
-                .onSnapshot((snapshot) => {
-                  setIsfollowing(false); //
-                  snapshot.docs.forEach((doc) => {
-                    console.log(doc.id, recipe.authorId);
-                    if (doc.id === recipe.authorId) {
-                      return setIsfollowing(true);
-                    }
-                  });
-                });
-              setIsMyself(false);
-            }
+    const unsubscribe = getRealtimeRecipe(recipeId, (recipeDoc) => {
+      if (recipeDoc.exists) {
+        // update recipe's details
+        const recipe = recipeDoc.data();
+        setRecipe(recipe);
+        const nutritionalFacts = countNutritionalFacts(recipe.ingredients);
+        setNutrition(nutritionalFacts);
+        getRealtimeFans(recipe.authorId, (fans) => setAuthorFans(fans.size));
+        getRealtimeRecipeLikes(recipe.id, (likes) =>
+          updateRecipe(recipe.id, { liked: likes.length })
+        );
+        getRealtimeRecipeComments(recipe.id, (comments) =>
+          updateRecipe(recipe.id, { comments: comments.length })
+        );
+
+        // update user's liked, favorite, following
+        if (user) {
+          getRealtimeIsLiked(user.uid, (likedRecipes) => {
+            setIsLiked(false); //
+            likedRecipes.forEach((likedRecipe) => {
+              if (likedRecipe.id === recipeId) {
+                return setIsLiked(true);
+              }
+            });
+          });
+          getRealtimeIsFavorite(user.uid, (favoriteRecipes) => {
+            setIsAdded(false); //
+            favoriteRecipes.forEach((favoriteRecipe) => {
+              if (favoriteRecipe.id === recipeId) {
+                return setIsAdded(true);
+              }
+            });
+          });
+          if (user.uid === recipe.authorId) {
+            setIsMyself(true);
+          } else {
+            getRealtimeFollowings(user.uid, (followings) => {
+              setIsfollowing(false); //
+              followings.forEach((following) => {
+                if (following.id === recipe.authorId) {
+                  return setIsfollowing(true);
+                }
+              });
+            });
+            setIsMyself(false);
           }
-        } else {
-          console.log("doc not exist");
         }
-      });
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
   }, [recipe.authorId, recipeId]);
 
-  const toggleLiked = () => {
+  const handleToggleLiked = () => {
     if (user) {
-      // setIsLiked(!isLiked);
-      db.collection("users")
-        .doc(user.uid)
-        .collection("liked")
-        .doc(recipeId)
-        .get()
-        .then((doc) => {
-          doc.data()
-            ? db
-                .collection("users")
-                .doc(user.uid)
-                .collection("liked")
-                .doc(recipeId)
-                .delete()
-            : db
-                .collection("users")
-                .doc(user.uid)
-                .collection("liked")
-                .doc(recipeId)
-                .set({ recipeId: recipeId });
-        })
-        .catch((err) => console.log(err));
+      toggleLiked(user.uid, recipeId);
     } else {
       setShowAlert(true);
       setAlertText("請先登入會員才能按讚哦！");
     }
   };
 
-  const toggleAdded = () => {
+  const handleToggleFavorite = () => {
     if (user) {
-      // setIsAdded(!isAdded);
-      db.collection("users")
-        .doc(user.uid)
-        .collection("favorites")
-        .doc(recipeId)
-        .get()
-        .then((doc) => {
-          doc.data()
-            ? db
-                .collection("users")
-                .doc(user.uid)
-                .collection("favorites")
-                .doc(recipeId)
-                .delete()
-            : db
-                .collection("users")
-                .doc(user.uid)
-                .collection("favorites")
-                .doc(recipeId)
-                .set({ recipeId: recipeId });
-        })
-        .catch((err) => console.log(err));
+      toggleFavorite(user.uid, recipeId);
     } else {
       setShowAlert(true);
       setAlertText("請先登入會員才能收藏哦！");
     }
   };
 
-  const toggleFollowing = () => {
+  const handleToggleFollowing = () => {
     if (user) {
-      // setIsfollowing(!isFollowing);
-      db.collection("users")
-        .doc(user.uid)
-        .collection("followings")
-        .doc(recipe.authorId)
-        .get()
-        .then((doc) => {
-          doc.data()
-            ? db
-                .collection("users")
-                .doc(user.uid)
-                .collection("followings")
-                .doc(recipe.authorId)
-                .delete()
-                .then(() =>
-                  db
-                    .collection("users")
-                    .doc(recipe.authorId)
-                    .collection("fans")
-                    .doc(user.uid)
-                    .delete()
-                )
-            : db
-                .collection("users")
-                .doc(user.uid)
-                .collection("followings")
-                .doc(recipe.authorId)
-                .set({ followingId: recipe.authorId })
-                .then(() =>
-                  db
-                    .collection("users")
-                    .doc(recipe.authorId)
-                    .collection("fans")
-                    .doc(user.uid)
-                    .set({ fanId: user.uid })
-                );
-        })
-        .catch((err) => console.log(err));
+      toggleFollowing(user.uid, recipe.authorId);
     } else {
       setShowAlert(true);
       setAlertText("請先登入會員才能追蹤哦！");
@@ -314,7 +220,7 @@ const Recipe = ({ user }) => {
                   (isFollowing ? (
                     <button
                       className={styles.greyBtn}
-                      onClick={toggleFollowing}
+                      onClick={handleToggleFollowing}
                     >
                       <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>
                       &nbsp;已追蹤
@@ -322,7 +228,7 @@ const Recipe = ({ user }) => {
                   ) : (
                     <button
                       className={styles.darkBtn}
-                      onClick={toggleFollowing}
+                      onClick={handleToggleFollowing}
                     >
                       追蹤
                     </button>
@@ -347,7 +253,7 @@ const Recipe = ({ user }) => {
               </div>
               <div className={styles.summary}>{recipe.summary}</div>
               <div className={styles.btnGroup}>
-                <div className={styles.btn} onClick={toggleLiked}>
+                <div className={styles.btn} onClick={handleToggleLiked}>
                   {isLiked ? (
                     <button className={styles.lineBtn}>
                       <FontAwesomeIcon
@@ -366,7 +272,7 @@ const Recipe = ({ user }) => {
                     </button>
                   )}
                 </div>
-                <div className={styles.btn} onClick={toggleAdded}>
+                <div className={styles.btn} onClick={handleToggleFavorite}>
                   {isAdded ? (
                     <button className={styles.lineBtn}>
                       <FontAwesomeIcon

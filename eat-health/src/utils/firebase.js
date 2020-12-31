@@ -57,18 +57,22 @@ export const getImageUrlFromStorage = (refPath, childPath, callback) => {
 };
 
 // firestore
-export const postUser = (displayName, photoURL) => {
-  return db.collection("users").doc(auth.currentUser.uid).set({
-    displayName,
-    photoURL,
-    email: auth.currentUser.email,
-    userId: auth.currentUser.uid,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-  });
+// recipes
+export const getRecipe = (recipeId) => {
+  return db.collection("recipes").doc(recipeId).get();
 };
 
-export const getRecipe = (docId) => {
-  return db.collection("recipes").doc(docId).get();
+export const getUserRecipe = (userId) => {
+  return db.collection("recipes").where("authorId", "==", userId).get();
+};
+
+export const getRealtimeRecipe = (recipeId, callback) => {
+  return db
+    .collection("recipes")
+    .doc(recipeId)
+    .onSnapshot((snapshots) => {
+      callback(snapshots);
+    });
 };
 
 export const getAllRecipes = () => {
@@ -77,10 +81,6 @@ export const getAllRecipes = () => {
 
 export const getRecommended = (recipeId) => {
   return db.collection("recipes").where("id", "!=", recipeId).limit(5).get();
-};
-
-export const getFavorites = (userId) => {
-  return db.collection("users").doc(userId).collection("favorites").get();
 };
 
 export const getLatests = () => {
@@ -148,4 +148,189 @@ export const getRealtimeRecipeComments = (recipeId, callback) => {
     .onSnapshot((snapshots) => {
       callback(snapshots.docs);
     });
+};
+
+// users
+export const postUser = (displayName, photoURL) => {
+  return db.collection("users").doc(auth.currentUser.uid).set({
+    displayName,
+    photoURL,
+    email: auth.currentUser.email,
+    userId: auth.currentUser.uid,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+  });
+};
+
+export const getUser = (userId) => {
+  return db.collection("users").doc(userId).get();
+};
+
+export const getFavorites = (userId) => {
+  return db.collection("users").doc(userId).collection("favorites").get();
+};
+
+export const getRealtimeFans = (userId, callback) => {
+  return db
+    .collection("users")
+    .doc(userId)
+    .collection("fans")
+    .onSnapshot((snapshots) => {
+      callback(snapshots);
+    });
+};
+
+export const getRealtimeFollowings = (userId, callback) => {
+  return db
+    .collection("users")
+    .doc(userId)
+    .collection("followings")
+    .onSnapshot((snapshot) => {
+      callback(snapshot.docs);
+    });
+};
+
+export const getIsFollowing = (userId, followId) => {
+  return db
+    .collection("users")
+    .doc(userId)
+    .collection("followings")
+    .doc(followId)
+    .get();
+};
+
+export const addFollowing = (userId, followId) => {
+  return db
+    .collection("users")
+    .doc(userId)
+    .collection("followings")
+    .doc(followId)
+    .set({ followingId: followId });
+};
+
+export const deleteFollowing = (userId, followId) => {
+  return db
+    .collection("users")
+    .doc(userId)
+    .collection("followings")
+    .doc(followId)
+    .delete();
+};
+
+export const addFan = (followId, userId) => {
+  return db
+    .collection("users")
+    .doc(followId)
+    .collection("fans")
+    .doc(userId)
+    .set({ fanId: userId });
+};
+
+export const deleteFan = (followId, userId) => {
+  return db
+    .collection("users")
+    .doc(followId)
+    .collection("fans")
+    .doc(userId)
+    .delete();
+};
+
+export const toggleFollowing = (userId, followId) => {
+  return getIsFollowing(userId, followId).then((doc) => {
+    const isAlreadyFollowing = doc.data();
+    isAlreadyFollowing
+      ? deleteFollowing(userId, followId).then(() =>
+          deleteFan(followId, userId)
+        )
+      : addFollowing(userId, followId).then(() => addFan(followId, userId));
+  });
+};
+
+export const getIsFavorite = (userId, recipeId) => {
+  return db
+    .collection("users")
+    .doc(userId)
+    .collection("favorites")
+    .doc(recipeId)
+    .get();
+};
+
+export const getRealtimeIsFavorite = (userId, callback) => {
+  return db
+    .collection("users")
+    .doc(userId)
+    .collection("favorites")
+    .onSnapshot((snapshot) => {
+      callback(snapshot.docs);
+    });
+};
+
+export const deleteFavorite = (userId, recipeId) => {
+  return db
+    .collection("users")
+    .doc(userId)
+    .collection("favorites")
+    .doc(recipeId)
+    .delete();
+};
+
+export const addFavorite = (userId, recipeId) => {
+  return db
+    .collection("users")
+    .doc(userId)
+    .collection("favorites")
+    .doc(recipeId)
+    .set({ recipeId: recipeId });
+};
+
+export const toggleFavorite = (userId, recipeId) => {
+  return getIsFavorite(userId, recipeId).then((doc) => {
+    const isAlreadyFavorite = doc.data();
+    isAlreadyFavorite
+      ? deleteFavorite(userId, recipeId)
+      : addFavorite(userId, recipeId);
+  });
+};
+
+export const getIsLiked = (userId, recipeId) => {
+  return db
+    .collection("users")
+    .doc(userId)
+    .collection("liked")
+    .doc(recipeId)
+    .get();
+};
+
+export const getRealtimeIsLiked = (userId, callback) => {
+  return db
+    .collection("users")
+    .doc(userId)
+    .collection("liked")
+    .onSnapshot((snapshot) => {
+      callback(snapshot.docs);
+    });
+};
+
+export const deleteLiked = (userId, recipeId) => {
+  return db
+    .collection("users")
+    .doc(userId)
+    .collection("liked")
+    .doc(recipeId)
+    .delete();
+};
+
+export const addLiked = (userId, recipeId) => {
+  return db
+    .collection("users")
+    .doc(userId)
+    .collection("liked")
+    .doc(recipeId)
+    .set({ recipeId: recipeId });
+};
+
+export const toggleLiked = (userId, recipeId) => {
+  return getIsLiked(userId, recipeId).then((doc) => {
+    const isAlreadyLiked = doc.data();
+    isAlreadyLiked ? deleteLiked(userId, recipeId) : addLiked(userId, recipeId);
+  });
 };
