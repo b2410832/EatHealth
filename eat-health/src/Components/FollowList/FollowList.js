@@ -4,66 +4,44 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./FollowList.module.scss";
-import { db, toggleFollowing, getUser } from "../../utils/firebase";
+import {
+  toggleFollowing,
+  getUser,
+  getUserRecipe,
+  getFans,
+} from "../../utils/firebase";
 import image from "../../images/noFollowing.png";
+
+import Modal from "../Modal/Modal";
 
 const FollowList = ({ followings, user, gotFollowingsData }) => {
   const [followingList, setFollowingList] = useState([]);
+  const [showUnfollowModal, setShowUnfollowModal] = useState(false);
 
   let history = useHistory();
 
   useEffect(() => {
-    let newFollowingList = [];
+    let followingUsers = [];
     followings.forEach((followingId) => {
-      // 取得每個追蹤者的基本資訊
-      getUser(followingId).then((user) => {
-        const { userId, displayName, photoURL } = user.data();
-        newFollowingList = [
-          ...newFollowingList,
-          { userId, displayName, photoURL, isFollowing: true },
+      let getUserData = [
+        getUser(followingId),
+        getUserRecipe(followingId),
+        getFans(followingId),
+      ];
+      Promise.all(getUserData).then((res) => {
+        followingUsers = [
+          ...followingUsers,
+          {
+            userId: res[0].data().userId,
+            displayName: res[0].data().displayName,
+            photoURL: res[0].data().photoURL,
+            isFollowing: true,
+            recipes: res[1].size,
+            fans: res[2].size,
+          },
         ];
+        setFollowingList(followingUsers);
       });
-      // 取得每個追蹤者的食譜數
-      db.collection("recipes")
-        .where("authorId", "==", followingId)
-        .get()
-        .then((docs) => {
-          newFollowingList = newFollowingList.map((item) => {
-            if (item.userId === followingId) {
-              return { ...item, recipes: docs.size };
-            }
-            return item;
-          });
-          // 取得每個追蹤者的粉絲數
-          db.collection("users")
-            .doc(followingId)
-            .collection("fans")
-            .get()
-            .then((snapshots) => {
-              newFollowingList = newFollowingList.map((item) => {
-                if (item.userId === followingId) {
-                  return { ...item, fans: snapshots.size };
-                }
-                return item;
-              });
-              // 取得使用者是否正在追蹤每個追蹤者
-              db.collection("users")
-                .doc(user.uid)
-                .collection("followings")
-                .get()
-                .then((snapshots) => {
-                  snapshots.forEach((snapshot) => {
-                    newFollowingList = newFollowingList.map((item) => {
-                      if (snapshot.id === item.userId) {
-                        return { ...item, isFollowing: true };
-                      }
-                      return item;
-                    });
-                  });
-                  setFollowingList(newFollowingList);
-                });
-            });
-        });
     });
   }, [followings]);
 
@@ -73,6 +51,7 @@ const FollowList = ({ followings, user, gotFollowingsData }) => {
         toggleFollowing(user.uid, followId);
       }
     });
+    setShowUnfollowModal(false);
   };
 
   const handleClickMore = () => {
@@ -102,7 +81,20 @@ const FollowList = ({ followings, user, gotFollowingsData }) => {
         ) : (
           followingList.map((following) => {
             return (
-              <div className={styles.follow} key={following.userId}>
+              <div
+                id={following.userId}
+                className={styles.follow}
+                key={following.userId}
+              >
+                {showUnfollowModal && (
+                  <Modal
+                    text="確定要取消追蹤此人？"
+                    handleCancel={() => setShowUnfollowModal(false)}
+                    handelConfirm={() =>
+                      handleToggleFollowing(showUnfollowModal)
+                    }
+                  />
+                )}
                 <Link to={`/profile/${following.userId}/myRecipes`}>
                   <div className={styles.user}>
                     <div className={styles.image}>
@@ -125,7 +117,7 @@ const FollowList = ({ followings, user, gotFollowingsData }) => {
                   {following.isFollowing ? (
                     <button
                       className={styles.greyBtn}
-                      onClick={() => handleToggleFollowing(following.userId)}
+                      onClick={() => setShowUnfollowModal(following.userId)}
                     >
                       <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>
                       &nbsp;已追蹤

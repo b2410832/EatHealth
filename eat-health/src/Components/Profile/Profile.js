@@ -33,6 +33,7 @@ const Profile = ({ user }) => {
 
   useEffect(() => {
     setGotFollowingsData(false);
+    // console.log("useeffect", userId); //
 
     getUser(userId).then((userDoc) => {
       const user = userDoc.data();
@@ -43,9 +44,12 @@ const Profile = ({ user }) => {
     });
     getRealtimeFans(userId, (fans) => {
       setFans(fans.size);
+      // console.log("getRealtimeFans",userId); //
     });
+
     // 取得追蹤中使用者id
     getRealtimeFollowings(userId, (followings) => {
+      // console.log("getRealtimeFollowings",userId); //
       let followingList = [];
       followings.forEach((following) => {
         followingList = [...followingList, following.data().followingId];
@@ -57,7 +61,7 @@ const Profile = ({ user }) => {
     if (user && user.uid !== userId) {
       getRealtimeFollowings(user.uid, (followings) => {
         followings.forEach((following) => {
-          setIsFollowing(false); //
+          // setIsFollowing(false); //
           if (following.id === userId) {
             setIsFollowing(true);
           }
@@ -69,6 +73,7 @@ const Profile = ({ user }) => {
   const handleToggleFollowing = () => {
     setIsFollowing(!isFollowing);
     toggleFollowing(user.uid, userId);
+    // console.log("handleToggleFollowing",userId); //
   };
 
   return (

@@ -7,7 +7,7 @@ import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import styles from "./LogIn.module.scss";
 import Alert from "../Alert/Alert";
 
-const LogIn = ({ setUser, setDisplayName }) => {
+const LogIn = ({ setUser }) => {
   let history = useHistory();
   let urlParams = new URLSearchParams(window.location.search);
   let to = urlParams.get("to");
@@ -33,7 +33,6 @@ const LogIn = ({ setUser, setDisplayName }) => {
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
         setUser(auth.currentUser); // displayName, email, uid, photoURL
-        // setInputs({email:"", password:""});
         setIsLoading(false);
         to ? history.push(to) : history.push("/");
       })

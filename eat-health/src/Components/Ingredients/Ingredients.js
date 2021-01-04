@@ -57,10 +57,6 @@ const Ingredients = ({ ingredients, setIngredients }) => {
     setShowDeleteModal(false);
   };
 
-  const toggleShowDeleteModal = () => {
-    setShowDeleteModal(!showDeleteModal);
-  };
-
   return (
     <div>
       <div className={styles.text}>
@@ -91,7 +87,7 @@ const Ingredients = ({ ingredients, setIngredients }) => {
               <div className={styles.delete}>
                 <FontAwesomeIcon
                   icon={faTrashAlt}
-                  onClick={toggleShowDeleteModal}
+                  onClick={() => setShowDeleteModal(ingredient.uid)}
                 ></FontAwesomeIcon>
               </div>
             )}
@@ -99,8 +95,8 @@ const Ingredients = ({ ingredients, setIngredients }) => {
           {showDeleteModal && (
             <Modal
               text="確定要刪除這道食材？"
-              handleCancel={toggleShowDeleteModal}
-              handelConfirm={() => deleteIngredient(ingredient.uid)}
+              handleCancel={() => setShowDeleteModal(false)}
+              handelConfirm={() => deleteIngredient(showDeleteModal)}
             />
           )}
         </div>

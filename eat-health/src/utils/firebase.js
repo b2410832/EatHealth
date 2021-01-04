@@ -169,6 +169,10 @@ export const getFavorites = (userId) => {
   return db.collection("users").doc(userId).collection("favorites").get();
 };
 
+export const getFans = (userId) => {
+  return db.collection("users").doc(userId).collection("fans").get();
+};
+
 export const getRealtimeFans = (userId, callback) => {
   return db
     .collection("users")

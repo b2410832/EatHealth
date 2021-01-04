@@ -58,10 +58,6 @@ const Steps = ({ steps, setSteps }) => {
     });
   };
 
-  const toggleShowDeleteModal = () => {
-    setShowDeleteModal(!showDeleteModal);
-  };
-
   return (
     <div className={styles.stepsContainer}>
       <div className={styles.text}>
@@ -100,7 +96,7 @@ const Steps = ({ steps, setSteps }) => {
                 ) : (
                   <div
                     className={styles.delete}
-                    onClick={toggleShowDeleteModal}
+                    onClick={() => setShowDeleteModal(step.uid)}
                   >
                     <FontAwesomeIcon icon={faTrashAlt}></FontAwesomeIcon>
                   </div>
@@ -115,8 +111,8 @@ const Steps = ({ steps, setSteps }) => {
             {showDeleteModal && (
               <Modal
                 text="確定要刪除此步驟？"
-                handleCancel={toggleShowDeleteModal}
-                handelConfirm={() => deleteStep(step.uid)}
+                handleCancel={() => setShowDeleteModal(false)}
+                handelConfirm={() => deleteStep(showDeleteModal)}
               />
             )}
           </div>
