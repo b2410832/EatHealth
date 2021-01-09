@@ -28,37 +28,33 @@ like and comment on recipe posts, add to favorites, and follow authors.
     - [React Minimal Pie Chart](https://www.npmjs.com/package/react-minimal-pie-chart)
     - [React Multi Carousel](https://www.npmjs.com/package/react-multi-carousel)
 ## User Flow
----
 ### Flow Chart
 ![](./eat-health/readme/userflow.png)
 ### Wireflow
 ![](./eat-health/readme/wireflow.png)
 
 ## Features
----
-1. Filter recipes by different diet goals and mealtime
+### 1. Filter recipes by different diet goals and mealtime
 ![](./eat-health/readme/demo_filter.gif)
 
-2. Like recipe posts / Add recipes to favorite list / Follow authors
+### 2. Like recipe posts / Add recipes to favorite list / Follow authors
 ![](./eat-health/readme/demo_like_add_follow.gif)
 ![](./eat-health/readme/demo_profile.gif)
 
-3. Upload recipe with multiple photos and details
+### 3. Upload recipe with multiple photos and details
 ![](./eat-health/readme/demo_writerecipe.gif)
 
 
-4. Comment on recipes/ Delete comments
+### 4. Comment on recipes/ Delete comments
 ![](./eat-health/readme/demo_comment.gif)
 
  
 
 ## Future Features
----
 - Edit/Delete recipes
 - Pagination
 - Add recipes' ingredients to shopping list
 ## Contact
----
-E-mail: b2410832@gmail.com
+E-mail: b506104062@tmu.edu.tw
 
 
