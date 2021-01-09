@@ -4,13 +4,11 @@ like and comment on recipe posts, add to favorites, and follow authors.
 
 ![](./eat-health/readme/mockup.png)
 ## Demo
----
 - Link: https://stylish-784bb.web.app/
 - Test account
     - E-mail: test@test.test
     - Password: 123456
 ## Technologies
----
 - Front-End Fundamental
     - HTML / CSS / JavaScript
     - SCSS
@@ -29,7 +27,7 @@ like and comment on recipe posts, add to favorites, and follow authors.
     - [React Multi Carousel](https://www.npmjs.com/package/react-multi-carousel)
 ## User Flow
 ### Flow Chart
-![](./eat-health/readme/userflow.png)
+![](./eat-health/readme/flowchart.png)
 ### Wireflow
 ![](./eat-health/readme/wireflow.png)
 
