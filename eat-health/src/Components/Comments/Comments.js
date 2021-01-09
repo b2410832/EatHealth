@@ -21,14 +21,20 @@ const Comments = ({ user }) => {
   const { recipeId } = useParams();
 
   useEffect(() => {
-    getRealtimeRecipeComments(recipeId, (commentsData) => {
-      setCommentsList(
-        commentsData.map((comment) => ({
-          ...comment.data(),
-          isEditing: false,
-        }))
-      );
-    });
+    const unsubscribeComments = getRealtimeRecipeComments(
+      recipeId,
+      (commentsData) => {
+        setCommentsList(
+          commentsData.map((comment) => ({
+            ...comment.data(),
+            isEditing: false,
+          }))
+        );
+      }
+    );
+    return () => {
+      unsubscribeComments();
+    };
   }, [recipeId]);
 
   const handleInputChange = (e) => {

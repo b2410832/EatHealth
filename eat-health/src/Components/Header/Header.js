@@ -5,7 +5,10 @@ import {
   faChevronDown,
   faChevronUp,
   faBars,
+  faSignInAlt,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faBookmark } from "@fortawesome/free-regular-svg-icons";
 
 import { logoutFromAuth } from "../../utils/firebase";
 import styles from "./Header.module.scss";
@@ -13,7 +16,7 @@ import logo from "../../images/logo-full.png";
 
 const Header = ({ user }) => {
   const [isExploring, setIsExploring] = useState(false);
-  const [isSidenavOpen, setIsSidenavOpen] = useState(true);
+  const [isSidenavOpen, setIsSidenavOpen] = useState(false);
   let history = useHistory();
 
   const menus = useRef();
@@ -196,33 +199,67 @@ const Header = ({ user }) => {
           <div className={styles.mask} onClick={toggleIsSidenavOpen}></div>
           <div className={styles.sidenavContainer}>
             {user ? (
-              <div style={{ display: "flex" }}>
-                <div className={styles.profile}>
-                  <img src={user.photoURL} alt="會員"></img>
-                  <div>{user.displayName}</div>
-                  <div
-                    className={styles.dropdown}
-                    onClick={() => setIsSidenavOpen(false)}
-                  >
-                    <Link to={`/profile/${user.uid}/myRecipes`}>
-                      <div className={styles.dropdownLink}>個人頁面</div>
-                    </Link>
-                    <Link to={`/profile/${user.uid}/favorites`}>
-                      <div className={styles.dropdownLink}>食譜收藏</div>
-                    </Link>
-                    <div className={styles.dropdownLink} onClick={logout}>
-                      登出
+              <div className={styles.member}>
+                <Link to={`/profile/${user.uid}/myRecipes`}>
+                  <div className={styles.profile}>
+                    <div>
+                      <img src={user.photoURL} alt="會員"></img>
                     </div>
+                    <div>{user.displayName}</div>
                   </div>
+                </Link>
+                <div className={styles.links}>
+                  <Link to={`/profile/${user.uid}/myRecipes`}>
+                    <div className={styles.link}>
+                      <FontAwesomeIcon
+                        icon={faUser}
+                        style={{ marginRight: "12px" }}
+                      ></FontAwesomeIcon>
+                      個人頁面
+                    </div>
+                  </Link>
+                  <Link to={`/profile/${user.uid}/favorites`}>
+                    <div className={styles.link}>
+                      <FontAwesomeIcon
+                        icon={faBookmark}
+                        style={{ marginRight: "12px" }}
+                      ></FontAwesomeIcon>
+                      食譜收藏
+                    </div>
+                  </Link>
+                  <Link to="/writeRecipe">
+                    <div className={styles.link}>
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        style={{ marginRight: "12px" }}
+                      ></FontAwesomeIcon>
+                      寫食譜
+                    </div>
+                  </Link>
+                </div>
+                <div className={styles.logout} onClick={logout}>
+                  登出
                 </div>
               </div>
             ) : (
               <div className={styles.member}>
-                <Link to="/signup">
-                  <button className={styles.lineBtn}>註冊</button>
-                </Link>
                 <Link to="/login">
-                  <div className={styles.log}>登入</div>
+                  <div className={styles.link}>
+                    <FontAwesomeIcon
+                      icon={faSignInAlt}
+                      style={{ marginRight: "10px" }}
+                    ></FontAwesomeIcon>
+                    登入
+                  </div>
+                </Link>
+                <Link to="/signup">
+                  <div className={styles.link}>
+                    <FontAwesomeIcon
+                      icon={faUser}
+                      style={{ marginRight: "12px" }}
+                    ></FontAwesomeIcon>
+                    註冊
+                  </div>
                 </Link>
               </div>
             )}

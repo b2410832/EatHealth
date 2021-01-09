@@ -33,47 +33,56 @@ const Profile = ({ user }) => {
 
   useEffect(() => {
     setGotFollowingsData(false);
-    // console.log("useeffect", userId); //
 
+    // 取得基本資料
     getUser(userId).then((userDoc) => {
       const user = userDoc.data();
       setProfile(user);
     });
+    // 取得食譜數量
     getUserRecipe(userId).then((recipeDocs) => {
       setRecipes(recipeDocs.size);
     });
-    getRealtimeFans(userId, (fans) => {
+    // 取得粉絲數量
+    const unsubscribeFans = getRealtimeFans(userId, (fans) => {
       setFans(fans.size);
-      // console.log("getRealtimeFans",userId); //
     });
 
-    // 取得追蹤中使用者id
-    getRealtimeFollowings(userId, (followings) => {
-      // console.log("getRealtimeFollowings",userId); //
-      let followingList = [];
-      followings.forEach((following) => {
-        followingList = [...followingList, following.data().followingId];
-      });
-      setFollowings(followingList);
-      setGotFollowingsData(true);
-    });
-    // 取得使用者是否正在追蹤此人
-    if (user && user.uid !== userId) {
-      getRealtimeFollowings(user.uid, (followings) => {
+    // 取得追蹤列表
+    const unsubscribeFollowingList = getRealtimeFollowings(
+      userId,
+      (followings) => {
+        let followingList = [];
         followings.forEach((following) => {
-          // setIsFollowing(false); //
+          followingList = [...followingList, following.data().followingId];
+        });
+        setFollowings(followingList);
+        setGotFollowingsData(true);
+      }
+    );
+
+    // 取得使用者是否正在追蹤此人
+    const unsubscribeIsFollowing = getRealtimeFollowings(
+      user.uid,
+      (followings) => {
+        followings.forEach((following) => {
           if (following.id === userId) {
             setIsFollowing(true);
           }
         });
-      });
-    }
+      }
+    );
+
+    return () => {
+      unsubscribeFans();
+      unsubscribeFollowingList();
+      unsubscribeIsFollowing();
+    };
   }, [userId]);
 
   const handleToggleFollowing = () => {
     setIsFollowing(!isFollowing);
     toggleFollowing(user.uid, userId);
-    // console.log("handleToggleFollowing",userId); //
   };
 
   return (

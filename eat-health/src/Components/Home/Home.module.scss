@@ -1,6 +1,5 @@
 .homeContainer {
   background-color: #ffffff;
-  // margin-top: -100px;
   padding-bottom: 80px;
   .banner {
     background-color: #fcf5ea;
@@ -16,14 +15,14 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      order: 1;
       .sloganContainer {
         font-size: 18px;
         .slogan {
-          font-size: 2em;
+          font-size: 1.8em;
           font-weight: bold;
-          line-height: 1.5em;
+          line-height: 1.3em;
           letter-spacing: 1px;
-          // text-shadow: 3px 3px 0px #fec740;
         }
         .intro {
           font-size: 1em;
@@ -49,15 +48,13 @@
       }
     }
     .cover {
-      width: 50%;
+      flex: auto;
       padding: 30px;
       display: flex;
+      order: 2;
       img {
         margin: auto;
         width: 80%;
-        // margin-top: 60px;
-        // margin-right: -100px;
-        // margin-left: 80px;
       }
     }
   }
@@ -88,13 +85,6 @@
         background-color: #fec740;
       }
     }
-    .latest {
-      // .newRecipes {
-      //     display: flex;
-      //     flex-wrap: wrap;
-      //     justify-content: space-between;
-      // }
-    }
     a {
       display: block;
     }
@@ -102,15 +92,10 @@
       width: 100%;
     }
     .recipe {
-      // width: 23%;
       margin-right: 20px;
       margin-left: 20px;
       margin-top: 20px;
       border: 1px solid #e4e6e9;
-      // a {
-      //     display: flex;
-      //     flex-direction: column;
-      // }
       .image {
         height: 250px;
         overflow: hidden;
@@ -123,9 +108,6 @@
       }
       .body {
         padding: 10px;
-        // display: flex;
-        // flex-direction: column;
-        // height: 100%;
         .name {
           font-size: 20px;
           font-weight: bold;
@@ -137,7 +119,6 @@
           margin-bottom: 20px;
         }
         .tag {
-          // margin-top: auto;
           margin-bottom: 10px;
           small {
             border: 1px solid #85bf3e;
@@ -270,7 +251,6 @@
   outline: 0;
   transition: all 0.2s;
   border-radius: 35px;
-  // z-index: 1000;
   border: 0;
   background: rgba(0, 0, 0, 0.5);
   min-width: 43px;
@@ -297,7 +277,6 @@
   outline: 0;
   transition: all 0.2s;
   border-radius: 35px;
-  // z-index: 1000;
   border: 0;
   background: rgba(0, 0, 0, 0.5);
   min-width: 43px;
@@ -348,11 +327,6 @@
 @media (max-width: 900px) {
   .homeContainer {
     .banner {
-      .cta {
-        .sloganContainer {
-          font-size: 12px;
-        }
-      }
       .cover {
         padding: 10px;
         margin: 20px 0;
@@ -370,7 +344,6 @@
     .banner {
       .cta {
         .sloganContainer {
-          font-size: 10px;
           .ctaBtn {
             padding: 5px 8px;
           }
@@ -386,6 +359,9 @@
 @media (max-width: 600px) {
   .homeContainer {
     .banner {
+      .cta {
+        width: 65%;
+      }
       .cover {
         padding: 0;
         img {
@@ -403,37 +379,39 @@
     }
   }
 }
-@media (max-width: 560px) {
+@media (max-width: 540px) {
   .homeContainer {
-    .main {
-      .banner {
-        flex-wrap: wrap;
-        .cta {
-          width: 100%;
-          .sloganContainer {
-            margin: 10px auto;
-          }
-        }
-        .cover {
-          padding: 0;
-          width: 60%;
+    // .main {
+    .banner {
+      flex-wrap: wrap;
+      .cta {
+        width: 100%;
+        order: 2;
+        .sloganContainer {
           margin: 10px auto;
-          img {
-            width: 90%;
-          }
         }
       }
-      .categoryContainer {
-        .categories {
-          .category {
-            height: 120px;
-            .text {
-              font-size: 1.5em;
-            }
+      .cover {
+        padding: 0;
+        width: 60%;
+        margin: 10px auto;
+        order: 1;
+        img {
+          width: 90%;
+        }
+      }
+    }
+    .categoryContainer {
+      .categories {
+        .category {
+          height: 120px;
+          .text {
+            font-size: 1.5em;
           }
         }
       }
     }
+    // }
   }
 }
 @media (max-width: 400px) {

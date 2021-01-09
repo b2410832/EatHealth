@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { auth, db } from "./utils/firebase";
+import { auth, getRealtimeUser } from "./utils/firebase";
 
 import Header from "./Components/Header/Header";
 import WriteRecipe from "./Components/WriteRecipe/WriteRecipe";
@@ -21,19 +21,17 @@ const App = () => {
   useEffect(() => {
     auth.onAuthStateChanged(function (user) {
       if (user) {
-        db.collection("users")
-          .doc(user.uid)
-          .onSnapshot((snapshot) => {
-            let data = snapshot.data();
-            if (data) {
-              setUser({
-                uid: data.userId,
-                photoURL: data.photoURL,
-                displayName: data.displayName,
-                email: data.email,
-              });
-            }
-          });
+        getRealtimeUser(user.uid, (user) => {
+          let data = user.data();
+          if (data) {
+            setUser({
+              uid: data.userId,
+              photoURL: data.photoURL,
+              displayName: data.displayName,
+              email: data.email,
+            });
+          }
+        });
       } else {
         setUser(false);
       }

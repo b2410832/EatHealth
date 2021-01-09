@@ -4,8 +4,8 @@ import { faHeart, faCommentAlt } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
 
 import {
-  getRealtimeRecipeLikes,
-  getRealtimeRecipeComments,
+  getRecipeLikes,
+  getRecipeComments,
   updateRecipe,
 } from "../../utils/firebase";
 import styles from "./RecipeListItem.module.scss";
@@ -14,15 +14,17 @@ const RecipeListItem = ({ recipe }) => {
   const [recipeData, setRecipeData] = useState(recipe);
 
   useEffect(() => {
-    getRealtimeRecipeLikes(recipe.id, (likesData) => {
-      getRealtimeRecipeComments(recipe.id, (commentsData) => {
-        const updates = {
-          comments: commentsData.length,
-          liked: likesData.length,
-        };
-        updateRecipe(recipe.id, updates);
-        setRecipeData({ ...recipeData, ...updates });
-      });
+    const getLikesAndComments = [
+      getRecipeLikes(recipe.id),
+      getRecipeComments(recipe.id),
+    ];
+    Promise.all(getLikesAndComments).then((result) => {
+      const likesAndComments = {
+        liked: result[0].size,
+        comments: result[1].size,
+      };
+      updateRecipe(recipe.id, likesAndComments);
+      setRecipeData({ ...recipeData, ...likesAndComments });
     });
   }, []);
 

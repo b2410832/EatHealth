@@ -105,7 +105,7 @@ const Recipe = ({ user }) => {
     setIsfollowing(false);
     setIsMyself(false);
 
-    const unsubscribe = getRealtimeRecipe(recipeId, (recipeDoc) => {
+    const unsubscribeRecipe = getRealtimeRecipe(recipeId, (recipeDoc) => {
       if (recipeDoc.exists) {
         // update recipe's details
         const recipe = recipeDoc.data();
@@ -155,7 +155,7 @@ const Recipe = ({ user }) => {
       }
     });
     return () => {
-      unsubscribe();
+      unsubscribeRecipe();
     };
   }, [recipe.authorId, recipeId]);
 

@@ -130,6 +130,10 @@ export const deleteComment = (recipeId, commentId) => {
     .delete();
 };
 
+export const getRecipeLikes = (recipeId) => {
+  return db.collectionGroup("liked").where("recipeId", "==", recipeId).get();
+};
+
 export const getRealtimeRecipeLikes = (recipeId, callback) => {
   return db
     .collectionGroup("liked")
@@ -137,6 +141,10 @@ export const getRealtimeRecipeLikes = (recipeId, callback) => {
     .onSnapshot((snapshots) => {
       callback(snapshots.docs);
     });
+};
+
+export const getRecipeComments = (recipeId) => {
+  return db.collection("recipes").doc(recipeId).collection("comments").get();
 };
 
 export const getRealtimeRecipeComments = (recipeId, callback) => {
@@ -163,6 +171,15 @@ export const postUser = (displayName, photoURL) => {
 
 export const getUser = (userId) => {
   return db.collection("users").doc(userId).get();
+};
+
+export const getRealtimeUser = (userId, callback) => {
+  return db
+    .collection("users")
+    .doc(userId)
+    .onSnapshot((snapshot) => {
+      callback(snapshot);
+    });
 };
 
 export const getFavorites = (userId) => {
