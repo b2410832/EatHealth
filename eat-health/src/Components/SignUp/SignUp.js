@@ -8,6 +8,8 @@ import {
   postUser,
   createNativeUser,
 } from "../../utils/firebase";
+import logo from "../../images/logo-full.png";
+
 import styles from "./SignUp.module.scss";
 
 import Alert from "../Alert/Alert";
@@ -62,6 +64,11 @@ const SignUp = () => {
         <div className={styles.left}></div>
         <div className={styles.right}>
           <div className={styles.signup}>
+            <div className={styles.logo}>
+              <Link to="/">
+                <img src={logo} alt="logo"></img>
+              </Link>
+            </div>
             <h2 className={styles.title}>註冊會員</h2>
             <label htmlFor="email">
               姓名<span>(10字以內)</span>

@@ -29,6 +29,12 @@
         margin-top: 20px;
         margin-left: auto;
         margin-right: auto;
+        .logo {
+          width: 40%;
+          img {
+            width: 100%;
+          }
+        }
         label {
           display: block;
           margin-bottom: 5px;
@@ -81,6 +87,19 @@
         a {
           text-decoration: underline;
         }
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .background {
+    .container {
+      .left {
+        display: none;
+      }
+      .right {
+        width: 100%;
       }
     }
   }

@@ -144,7 +144,7 @@ const Profile = ({ user }) => {
               to={`${url}/favorites`}
               activeClassName={styles.activeLink}
             >
-              <li>我的收藏</li>
+              <li>收藏</li>
             </NavLink>
           )}
           {user.uid === userId && (

@@ -26,11 +26,11 @@ const Home = () => {
       items: 3,
     },
     tablet: {
-      breakpoint: { max: 1024, min: 464 },
+      breakpoint: { max: 1024, min: 500 },
       items: 2,
     },
     mobile: {
-      breakpoint: { max: 650, min: 0 },
+      breakpoint: { max: 500, min: 0 },
       items: 1,
     },
   };
@@ -76,7 +76,7 @@ const Home = () => {
             <div className={styles.intro}>
               食譜分享社群平台
               <br />
-              讓你發掘更多健康料理的可能性
+              讓你發掘更多健康料理
             </div>
             <Link to="/recipes?category=all">
               <button className={styles.ctaBtn}>

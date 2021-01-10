@@ -68,7 +68,7 @@ const Ingredients = ({ ingredients, setIngredients }) => {
             className={styles.ingredient}
             options={foods}
             onChange={(e) => handleSelectFoodChange(e, ingredient.uid)}
-            placeholder="請輸入食材名稱，例如：鮭魚"
+            placeholder="請輸入"
           />
           <div className={styles.qty}>
             <input
@@ -76,7 +76,7 @@ const Ingredients = ({ ingredients, setIngredients }) => {
               onChange={(e) => handleQtyChange(e, ingredient.uid)}
               value={ingredient.qty}
               type="text"
-              placeholder="請輸入克數，例如：0.1"
+              placeholder="0"
             />
             <div className={styles.grams}>公克</div>
             {ingredients.length === 1 ? (

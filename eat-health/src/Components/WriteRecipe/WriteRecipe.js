@@ -294,7 +294,7 @@ const WriteRecipe = ({ user }) => {
               <Select
                 options={recipeType}
                 onChange={handleSelectChange}
-                placeholder="請選擇...（必填）"
+                placeholder="請選擇"
               />
             </div>
             <div className={styles.recipeTime}>
@@ -302,7 +302,7 @@ const WriteRecipe = ({ user }) => {
               <Select
                 options={recipeTime}
                 onChange={handleSelectChange}
-                placeholder="請選擇...（必填）"
+                placeholder="請選擇"
               />
             </div>
           </div>
@@ -319,22 +319,22 @@ const WriteRecipe = ({ user }) => {
           <div className={styles.flex}>
             <div className={styles.portion}>
               <div className={styles.text}>
-                份量<span>（人份）</span>
+                份量<span> (人份)</span>
               </div>
               <Select
                 options={portion}
                 onChange={handleSelectChange}
-                placeholder="請選擇...（必填）"
+                placeholder="請選擇"
               />
             </div>
             <div className={styles.cookTime}>
               <div className={styles.text}>
-                烹調時間<span>（分鐘）</span>
+                烹調時間<span> (分鐘)</span>
               </div>
               <Select
                 options={cookTime}
                 onChange={handleSelectChange}
-                placeholder="請選擇...（必填）"
+                placeholder="請選擇"
               />
             </div>
           </div>

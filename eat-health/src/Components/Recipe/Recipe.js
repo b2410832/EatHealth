@@ -390,7 +390,9 @@ const Recipe = ({ user }) => {
             <div>{recipe.tips}</div>
           </div>
         </div>
-        <Comments user={user} />
+        <div className={styles.commentBox}>
+          <Comments user={user} />
+        </div>
       </div>
       <div className={styles.side}>
         <RecommendedBox />

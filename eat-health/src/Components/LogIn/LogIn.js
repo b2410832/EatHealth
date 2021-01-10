@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./LogIn.module.scss";
+import logo from "../../images/logo-full.png";
+
 import Alert from "../Alert/Alert";
 
 const LogIn = ({ setUser }) => {
@@ -66,6 +68,11 @@ const LogIn = ({ setUser }) => {
         <div className={styles.left}></div>
         <div className={styles.right}>
           <div className={styles.signup}>
+            <div className={styles.logo}>
+              <Link to="/">
+                <img src={logo} alt="logo"></img>
+              </Link>
+            </div>
             <h2 className={styles.title}>登入</h2>
             <label htmlFor="email">信箱</label>
             <input

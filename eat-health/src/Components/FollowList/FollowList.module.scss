@@ -109,16 +109,23 @@
     height: 40px;
     margin-left: auto;
   }
-  .darkBtn {
-    border: none;
-    background-color: #05172c;
-    color: #ffffff;
-    border-radius: 5px;
-    outline: none;
-    cursor: pointer;
-    font-size: 16px;
-    width: 80px;
-    height: 40px;
-    margin-left: auto;
+}
+
+@media (max-width: 500px) {
+  .followListContainer {
+    .follow {
+      .user {
+        width: 200px;
+        .info {
+          .name {
+            font-size: 1em;
+          }
+        }
+      }
+    }
+    .greyBtn {
+      width: 80px;
+      font-size: 14px;
+    }
   }
 }

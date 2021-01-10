@@ -1,10 +1,8 @@
 .categoryContainer {
-  width: 400px;
-  min-width: 400px;
+  width: 100%;
   min-height: 100px;
   background-color: #fff;
   border: 1px solid #e4e6e9;
-  // margin-left: 20px;
   padding: 10px;
   font-size: 18px;
   font-weight: bold;
@@ -63,17 +61,5 @@
     .balanced {
       background-image: url("../../images/category-balanced.jpg");
     }
-  }
-}
-
-@media (max-width: 1200px) {
-  .categoryContainer {
-    width: 350px;
-  }
-}
-@media (max-width: 800px) {
-  .categoryContainer {
-    margin: 0;
-    width: 100%;
   }
 }

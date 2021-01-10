@@ -85,7 +85,9 @@ const Recipes = () => {
             </div>
             <RecipeList />
           </div>
-          <CategoryBox />
+          <div className={styles.categoryBox}>
+            <CategoryBox />
+          </div>
         </div>
       </div>
     </div>
