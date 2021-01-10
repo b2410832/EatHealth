@@ -50,8 +50,8 @@ like and comment on recipe posts, add to favorites, and follow authors.
 
 ## Future Features
 - Edit/Delete recipes
+- Allow users to add ingredients that are not in Taiwan Food Nutrition Databse 
 - Pagination
-- Add recipes' ingredients to shopping list
 ## Contact
 E-mail: b506104062@tmu.edu.tw
 
