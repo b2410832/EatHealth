@@ -4,7 +4,7 @@ like and comment on recipe posts, add to favorites, and follow authors.
 
 ![](./eat-health/readme/mockup.png)
 ## Demo
-- Link: https://stylish-784bb.web.app/
+- Link: https://eatwell-a0ca6.web.app/
 - Test account
     - E-mail: test@test.test
     - Password: 123456
@@ -49,8 +49,8 @@ like and comment on recipe posts, add to favorites, and follow authors.
  
 
 ## Future Features
-- Edit/Delete recipes
 - Allow users to add ingredients that are not in Taiwan Food Nutrition Databse 
+- Edit/Delete recipes
 - Pagination
 ## Contact
 E-mail: b506104062@tmu.edu.tw
