@@ -122,7 +122,7 @@ const WriteRecipe = ({ user }) => {
 
   useEffect(() => {
     if (coverPhotoUrl) {
-      postRecipe();
+      uploadRecipe();
     }
   }, [coverPhotoUrl]);
 
@@ -221,7 +221,7 @@ const WriteRecipe = ({ user }) => {
     });
   };
 
-  const postRecipe = () => {
+  const uploadRecipe = () => {
     const { title, category, mealTime, summary, portion, cookTime } = inputs;
     const newSteps = steps.map((step) => {
       return {
