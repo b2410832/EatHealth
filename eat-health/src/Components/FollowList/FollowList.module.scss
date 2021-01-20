@@ -1,3 +1,5 @@
+@import "../../common";
+
 @keyframes fadein {
   from {
     opacity: 0;
@@ -7,7 +9,7 @@
   }
 }
 .followListContainer {
-  border: 1px solid #e4e6e9;
+  border: 1px solid $border-color;
   padding: 20px;
   min-height: 300px;
   animation: fadein 0.2s;
@@ -15,7 +17,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #fcf5ea;
+    background-color: $light-yello-color;
     .noFollowImage {
       width: 20%;
       margin-right: 30px;
@@ -32,18 +34,18 @@
         margin-bottom: 10px;
       }
       .description {
-        color: #808080;
+        color: $grey-text-color;
         font-size: 1em;
         margin-bottom: 10px;
         line-height: 1.5em;
       }
       .fullBtn {
         border: none;
-        background-color: #85bf3e;
-        color: #ffffff;
+        background-color: $green-color;
+        color: $white-color;
         padding: 5px 10px;
         border-radius: 5px;
-        border: 1px solid #85bf3e;
+        border: 1px solid $green-color;
         outline: none;
         cursor: pointer;
         margin-right: 30px;
@@ -51,7 +53,7 @@
         font-size: 16px;
 
         &:hover {
-          background-color: #72a534;
+          background-color: $green-color;
         }
       }
     }
@@ -81,11 +83,9 @@
         }
         .details {
           display: flex;
-          color: #808080;
+          color: $grey-text-color;
           .fans {
             margin-right: 10px;
-          }
-          .recipes {
           }
         }
       }

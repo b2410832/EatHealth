@@ -27,6 +27,7 @@ import {
 } from "../../utils/firebase";
 import styles from "./Recipe.module.scss";
 import tipsBulb from "../../images/tips-bulb.svg";
+import loading from "../../images/rolling.gif";
 
 import Chart from "../Chart/Chart";
 import Comments from "../Comments/Comments";
@@ -54,7 +55,9 @@ const Recipe = ({ user }) => {
   const [authorFans, setAuthorFans] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
   const [alertText, setAlertText] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
+  // calculate nutrition information
   const sumNutritionQty = (ingredients, nutrient) => {
     return Math.round(
       ingredients.reduce((total, ingredient) => {
@@ -91,6 +94,7 @@ const Recipe = ({ user }) => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     setNutrition({
       calories: 0,
       carbsQty: 0,
@@ -119,11 +123,12 @@ const Recipe = ({ user }) => {
         getRealtimeRecipeComments(recipe.id, (comments) =>
           updateRecipe(recipe.id, { comments: comments.length })
         );
+        setIsLoading(false);
 
         // update user's liked, favorite, following
         if (user) {
           getRealtimeIsLiked(user.uid, (likedRecipes) => {
-            setIsLiked(false); //
+            setIsLiked(false);
             likedRecipes.forEach((likedRecipe) => {
               if (likedRecipe.id === recipeId) {
                 return setIsLiked(true);
@@ -131,7 +136,7 @@ const Recipe = ({ user }) => {
             });
           });
           getRealtimeIsFavorite(user.uid, (favoriteRecipes) => {
-            setIsAdded(false); //
+            setIsAdded(false);
             favoriteRecipes.forEach((favoriteRecipe) => {
               if (favoriteRecipe.id === recipeId) {
                 return setIsAdded(true);
@@ -142,7 +147,7 @@ const Recipe = ({ user }) => {
             setIsMyself(true);
           } else {
             getRealtimeFollowings(user.uid, (followings) => {
-              setIsfollowing(false); //
+              setIsfollowing(false);
               followings.forEach((following) => {
                 if (following.id === recipe.authorId) {
                   return setIsfollowing(true);
@@ -194,6 +199,11 @@ const Recipe = ({ user }) => {
     <main className={styles.container}>
       <div className={styles.recipeContainer}>
         <div className={styles.recipe}>
+          {isLoading && (
+            <div className={styles.loading}>
+              <img src={loading} alt="loading"></img>
+            </div>
+          )}
           <div className={styles.title}>{recipe.title}</div>
           <div className={styles.tag}>
             <small>{recipe.category}</small>
@@ -359,28 +369,24 @@ const Recipe = ({ user }) => {
           </div>
           <div>
             <div className={styles.texts}>步驟</div>
-            {recipe.steps
-              ? recipe.steps.map((step, index) => {
-                  return (
-                    <div className={styles.step} key={step.uid}>
-                      <div className={styles.photo}>
-                        {step.imageUrl ? (
-                          <img
-                            src={step.imageUrl}
-                            alt={`步驟${index + 1}`}
-                          ></img>
-                        ) : (
-                          <div></div>
-                        )}
-                      </div>
-                      <div className={styles.content}>
-                        <div className={styles.stepNumber}>{index + 1}.</div>
-                        <p>{step.text}</p>
-                      </div>
+            {recipe.steps &&
+              recipe.steps.map((step, index) => {
+                return (
+                  <div className={styles.step} key={step.uid}>
+                    <div className={styles.photo}>
+                      {step.imageUrl ? (
+                        <img src={step.imageUrl} alt={`步驟${index + 1}`}></img>
+                      ) : (
+                        <div></div>
+                      )}
                     </div>
-                  );
-                })
-              : null}
+                    <div className={styles.content}>
+                      <div className={styles.stepNumber}>{index + 1}.</div>
+                      <p>{step.text}</p>
+                    </div>
+                  </div>
+                );
+              })}
           </div>
           <div className={styles.tips}>
             <img src={tipsBulb} alt="小叮嚀" style={{ width: "30px" }} />
@@ -390,6 +396,7 @@ const Recipe = ({ user }) => {
             <div>{recipe.tips}</div>
           </div>
         </div>
+
         <div className={styles.commentBox}>
           <Comments user={user} />
         </div>

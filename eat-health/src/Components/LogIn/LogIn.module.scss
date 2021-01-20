@@ -1,3 +1,5 @@
+@import "../../common";
+
 .background {
   background-color: #00000044;
   width: 100%;
@@ -8,7 +10,7 @@
   z-index: 1000;
   .container {
     display: flex;
-    background-color: #ffffff;
+    background-color: $white-color;
     height: 100vh;
     .left {
       background-color: #f0f2fc;
@@ -61,8 +63,8 @@
         }
         .fullBtn {
           border: none;
-          background-color: #85bf3e;
-          color: #ffffff;
+          background-color: $green-color;
+          color: $white-color;
           width: 200px;
           height: 50px;
           border-radius: 30px;

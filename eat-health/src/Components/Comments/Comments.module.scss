@@ -1,9 +1,11 @@
+@import "../../common";
+
 .commentsContainer {
   margin-top: 20px;
-  background-color: #ffffff;
+  background-color: $white-color;
   min-height: 300px;
   padding: 30px;
-  border: 1px solid #e4e6e9;
+  border: 1px solid $border-color;
 
   .title {
     font-weight: bold;
@@ -35,7 +37,6 @@
         transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
 
         &:focus {
-          // border-color: rgba(82, 168, 236, 0.8);
           box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset,
             0 0 8px rgba(211, 211, 211, 0.6);
           outline: 0 none;
@@ -47,8 +48,8 @@
         outline: none;
         cursor: pointer;
         font-size: 16px;
-        color: #ffffff;
-        background-color: #85bf3e;
+        color: $white-color;
+        background-color: $green-color;
         width: 100px;
         height: 40px;
         margin-top: 10px;
@@ -66,7 +67,7 @@
   .comment {
     display: flex;
     align-items: flex-start;
-    border-top: 1px solid #e4e6e9;
+    border-top: 1px solid $border-color;
     padding-top: 30px;
     margin-top: 30px;
     .body {
@@ -94,7 +95,7 @@
       transition: all 0.2s;
       position: relative;
       .delete {
-        background-color: #ffffff;
+        background-color: $white-color;
         width: 100px;
         height: 50px;
         line-height: 50px;

@@ -1,3 +1,5 @@
+@import "../../common";
+
 .recipesContainer {
   margin-bottom: 100px;
 }
@@ -21,7 +23,7 @@
   .categoryEnglish {
     font-size: 0.8em;
     letter-spacing: 0.5px;
-    text-shadow: 3px 3px 0px #fec740;
+    text-shadow: 3px 3px 0px $yellow-color;
   }
 }
 
@@ -38,7 +40,7 @@
       margin-right: 20px;
       .mealTime {
         background-color: #fcfcfc;
-        border: 1px solid #e4e6e9;
+        border: 1px solid $border-color;
         font-weight: bold;
         font-size: 18px;
         display: flex;
@@ -63,7 +65,7 @@
     }
   }
   .categoryBox {
-    width: 400px;
+    min-width: 400px;
   }
 }
 

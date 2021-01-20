@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { auth, getRealtimeUser } from "./utils/firebase";
+import { getRealtimeUser } from "./utils/firebase";
+import { auth } from "./utils/firebaseConfig";
 
 import Header from "./Components/Header/Header";
 import WriteRecipe from "./Components/WriteRecipe/WriteRecipe";
@@ -13,6 +14,7 @@ import Recipe from "./Components/Recipe/Recipe";
 import Profile from "./Components/Profile/Profile";
 import Loading from "./Components/Loading/Loading";
 import PrivateRoute from "./PrivateRoute";
+
 import styles from "./App.module.scss";
 
 const App = () => {

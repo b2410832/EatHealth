@@ -1,3 +1,5 @@
+@import "../../common";
+
 .alertContainer {
   position: fixed;
   width: 100%;
@@ -13,7 +15,7 @@
     display: flex;
     flex-direction: column;
     width: 250px;
-    background-color: #ffffff;
+    background-color: $white-color;
     padding: 20px;
     -webkit-box-shadow: 0px 0px 9px 1px rgba(0, 0, 0, 0.15);
     -moz-box-shadow: 0px 0px 9px 1px rgba(0, 0, 0, 0.15);
@@ -35,11 +37,11 @@
       letter-spacing: 1px;
       padding: 5px 10px;
       font-size: 16px;
-      background-color: #85bf3e;
+      background-color: $green-color;
       color: #ffffff;
     }
     .fullBtn:hover {
-      background-color: #72a534;
+      background-color: $green-color;
     }
   }
 }

@@ -1,77 +1,78 @@
+@import "../../common";
 .container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 10px;
+  .ingredient {
+    margin-right: 20px;
+    animation: fadein 0.5s;
+  }
+  .qty {
     display: flex;
-    justify-content: space-around;
     align-items: center;
-    margin-bottom: 10px;
-    .ingredient{
-        margin-right: 20px;
-        animation: fadein .5s;
+    justify-content: flex-end;
+    .grams {
+      width: 50px;
     }
-    .qty {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        .grams {
-            width: 50px;
-        }
+  }
+  .qty > * {
+    margin-right: 10px;
+  }
+  .input {
+    border: 1px solid hsl(0, 0%, 80%);
+    border-radius: 4px;
+    min-height: 38px;
+    width: 100%;
+    padding-left: 10px;
+    font-size: 16px;
+  }
+  .delete {
+    width: 5%;
+    text-align: center;
+    cursor: pointer;
+    color: #8a949f;
+    position: relative;
+    transition: all 0.2s;
+    &:hover {
+      color: #d83d3f;
     }
-    .qty > * {
-        margin-right: 10px;
+  }
+  @keyframes fadein {
+    from {
+      opacity: 0;
     }
-    .input {
-        border: 1px solid hsl(0,0%,80%);
-        border-radius: 4px;
-        min-height: 38px;
-        width: 100%;
-        padding-left: 10px;
-        font-size: 16px;;
+    to {
+      opacity: 1;
     }
-    .delete {
-        width: 5%;
-        text-align: center;
-        cursor: pointer;
-        color: #8a949f;
-        position: relative;
-        transition: all .2s;
-        &:hover {
-            color: #d83d3f;
-        }
-    }
-    @keyframes fadein {
-        from {
-            opacity: 0;
-        } 
-        to {
-            opacity: 1;
-        }
-    }
+  }
 }
 .container > * {
-    flex: 1;
+  flex: 1;
 }
 .text {
-    font-weight: bold;
-    font-size: 18px;
-    color: #3f3d56;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    span {
-        color: #8a949f;
-        font-weight: normal;
-        font-size: 14px;
-    }
+  font-weight: bold;
+  font-size: 18px;
+  color: #3f3d56;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  span {
+    color: #8a949f;
+    font-weight: normal;
+    font-size: 14px;
+  }
 }
 
 .button {
-    border: none;
-    background-color: #85bf3e;
-    color: #ffffff;
-    width: 120px;
-    height: 40px;
-    border-radius: 4px;
-    outline: none;
-    cursor: pointer;
-    font-size: 16px;
-    margin-right: 20px;
-    letter-spacing: 1px;
+  border: none;
+  background-color: $green-color;
+  color: $white-color;
+  width: 120px;
+  height: 40px;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 20px;
+  letter-spacing: 1px;
 }
