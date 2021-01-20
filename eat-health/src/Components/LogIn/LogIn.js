@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { auth } from "../../utils/firebaseConfig";
+import { auth } from "../../utils/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 

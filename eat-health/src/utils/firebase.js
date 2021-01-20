@@ -1,5 +1,17 @@
 import firebase from "firebase/app";
-import { auth, db, storage } from "./firebaseConfig";
+import "firebase/firestore";
+import "firebase/storage";
+import "firebase/auth";
+import firebaseConfig from "./firebaseConfig";
+
+// Initialize Firebase
+!firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
+
+const db = firebase.firestore();
+const storage = firebase.storage();
+const auth = firebase.auth();
+
+export { db, storage, auth };
 
 // auth
 export const createNativeUser = (email, password) => {

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { getRealtimeUser } from "./utils/firebase";
-import { auth } from "./utils/firebaseConfig";
+import { auth, getRealtimeUser } from "./utils/firebase";
 
 import Header from "./Components/Header/Header";
 import WriteRecipe from "./Components/WriteRecipe/WriteRecipe";
