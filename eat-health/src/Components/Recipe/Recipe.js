@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -37,6 +37,7 @@ import Alert from "../Alert/Alert";
 
 const Recipe = ({ user }) => {
   let { recipeId } = useParams();
+  let history = useHistory();
 
   const [recipe, setRecipe] = useState({});
   const [nutrition, setNutrition] = useState({
@@ -157,6 +158,8 @@ const Recipe = ({ user }) => {
             setIsMyself(false);
           }
         }
+      } else {
+        history.push("/");
       }
     });
     return () => {

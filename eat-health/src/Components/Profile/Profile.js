@@ -5,6 +5,7 @@ import {
   useRouteMatch,
   NavLink,
   useParams,
+  useHistory,
 } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
@@ -21,6 +22,8 @@ import {
 } from "../../utils/firebase";
 
 const Profile = ({ user }) => {
+  let history = useHistory();
+
   const [profile, setProfile] = useState({});
   const [recipes, setRecipes] = useState(0);
   const [fans, setFans] = useState(0);
@@ -36,8 +39,12 @@ const Profile = ({ user }) => {
 
     // 取得基本資料
     getUser(userId).then((userDoc) => {
-      const user = userDoc.data();
-      setProfile(user);
+      if (userDoc.exists) {
+        const user = userDoc.data();
+        setProfile(user);
+      } else {
+        history.push("/");
+      }
     });
     // 取得食譜數量
     getUserRecipe(userId).then((recipeDocs) => {

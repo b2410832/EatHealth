@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import { auth, getRealtimeUser } from "./utils/firebase";
 
 import Header from "./Components/Header/Header";
@@ -68,6 +73,9 @@ const App = () => {
               path="/profile/:userId"
               render={() => <Profile user={user} />}
             ></Route>
+            <Route path="*">
+              <Redirect to="/" />
+            </Route>
           </Switch>
         </div>
         <Footer />
