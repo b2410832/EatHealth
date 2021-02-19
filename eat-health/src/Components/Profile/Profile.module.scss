@@ -12,6 +12,7 @@
     padding-bottom: 20px;
     .photo {
       width: 100px;
+      height: 100px;
       background-color: #e4e6e9;
       display: flex;
       justify-content: center;
@@ -92,8 +93,9 @@
     outline: none;
     cursor: pointer;
     font-size: 16px;
-    width: 80px;
-    height: 40px;
+    // width: 80px;
+    // height: 40px;
+    padding: 0.6em 1.2em;
     margin-left: 50px;
   }
   .greyBtn {
@@ -104,8 +106,9 @@
     outline: none;
     cursor: pointer;
     font-size: 16px;
-    width: 100px;
-    height: 40px;
+    // width: 100px;
+    // height: 40px;
+    padding: 0.5em 1em;
     margin-left: 30px;
   }
 }

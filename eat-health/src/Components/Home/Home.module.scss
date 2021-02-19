@@ -242,21 +242,19 @@
   }
 }
 
-.leftArrow {
-  left: 0;
-  right: 0;
+.leftArrow,
+.rightArrow {
   position: absolute;
   outline: 0;
   transition: all 0.2s;
   border-radius: 35px;
   border: 0;
   background: rgba(0, 0, 0, 0.5);
-  min-width: 43px;
-  min-height: 43px;
+  width: 43px;
+  height: 43px;
   opacity: 1;
   cursor: pointer;
   &::before {
-    content: "\e824";
     font-size: 20px;
     color: #fff;
     display: block;
@@ -269,31 +267,17 @@
     background-color: $dark-green-color;
   }
 }
+
+.leftArrow {
+  left: 0;
+  &::before {
+    content: "\e824";
+  }
+}
 .rightArrow {
   right: 0;
-  position: absolute;
-  outline: 0;
-  transition: all 0.2s;
-  border-radius: 35px;
-  border: 0;
-  background: rgba(0, 0, 0, 0.5);
-  min-width: 43px;
-  min-height: 43px;
-  opacity: 1;
-  cursor: pointer;
-
   &::before {
     content: "\e825";
-    font-size: 20px;
-    color: #fff;
-    display: block;
-    font-family: revicons;
-    text-align: center;
-    z-index: 2;
-    position: relative;
-  }
-  &:hover {
-    background-color: $dark-green-color;
   }
 }
 
@@ -407,12 +391,16 @@
         display: none;
       }
     }
-    .categoryContainer {
-      .categories {
-        .category {
-          height: 120px;
-          .text {
-            font-size: 1.5em;
+    .main {
+      .categoryContainer {
+        margin: 40px 10px;
+        .categories {
+          grid-template-columns: repeat(1, 1fr);
+          padding: 0;
+          .category {
+            .text {
+              font-size: 1.5em;
+            }
           }
         }
       }
@@ -438,13 +426,6 @@
         .noRecipeImage {
           width: 60%;
           margin-right: 0;
-        }
-      }
-      .categoryContainer {
-        margin: 40px 0;
-        .categories {
-          grid-template-columns: repeat(1, 1fr);
-          padding: 0;
         }
       }
     }

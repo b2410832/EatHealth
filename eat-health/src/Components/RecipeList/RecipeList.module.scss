@@ -51,13 +51,19 @@
     }
   }
 }
-
-@media (max-width: 400px) {
+@media (max-width: 600px) {
   .noRecipeList {
-    flex-direction: column;
     .noRecipeImage {
       width: 35%;
     }
+    .text {
+      font-size: 16px;
+    }
+  }
+}
+@media (max-width: 400px) {
+  .noRecipeList {
+    flex-direction: column;
     .text {
       width: 80%;
       text-align: center;

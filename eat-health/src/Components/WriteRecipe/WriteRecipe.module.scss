@@ -93,6 +93,12 @@
   }
 }
 
+@media (max-width: 500px) {
+  .container {
+    width: 100%;
+  }
+}
+
 @media (max-width: 320px) {
   .cookTime,
   .portion {
