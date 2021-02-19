@@ -41,7 +41,7 @@
           border-radius: 5px;
           outline: none;
           cursor: pointer;
-          font-size: 1.2em;
+          font-size: 1em;
           transition: all 0.2s;
           &:hover {
             background-color: #72a534;
@@ -94,8 +94,8 @@
       width: 100%;
     }
     .recipe {
-      margin-right: 20px;
-      margin-left: 20px;
+      margin-right: 0.8em;
+      margin-left: 0.8em;
       margin-top: 20px;
       border: 1px solid $border-color;
       .image {
@@ -197,7 +197,7 @@
 .noRecipeList {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   background-color: $light-yello-color;
   border-radius: 5px;
   width: 100%; //
@@ -205,10 +205,6 @@
   margin: 80px auto 0;
   .noRecipeImage {
     width: 25%;
-    margin-right: 30px;
-    img {
-      width: 80%;
-    }
   }
   .text {
     font-size: 20px;
@@ -229,14 +225,14 @@
       border: none;
       background-color: $green-color;
       color: $white-color;
-      padding: 5px 10px;
+      padding: 0.5em 1em;
       border-radius: 5px;
       border: 1px solid $green-color;
       outline: none;
       cursor: pointer;
       margin-right: 30px;
       transition: all 0.2s;
-      font-size: 1.2em;
+      font-size: 1em;
       letter-spacing: 1px;
 
       &:hover {
@@ -334,11 +330,11 @@
         margin: 20px 0;
       }
     }
-    .noRecipeList {
-      .text {
-        font-size: 16px;
-      }
-    }
+    // .noRecipeList {
+    //   .text {
+    //     font-size: 16px;
+    //   }
+    // }
   }
 }
 @media (max-width: 700px) {
@@ -347,9 +343,10 @@
       .cta {
         .sloganContainer {
           padding: 2em;
-          .ctaBtn {
-            padding: 5px 8px;
-          }
+          font-size: 16px;
+          // .ctaBtn {
+          //   padding: 5px 8px;
+          // }
         }
       }
       .cover {
@@ -362,6 +359,14 @@
         .image {
           height: 150px;
         }
+      }
+    }
+    .noRecipeList {
+      .noRecipeImage {
+        width: 40%;
+      }
+      .text {
+        font-size: 16px;
       }
     }
   }
@@ -381,10 +386,7 @@
     }
     .noRecipeList {
       .noRecipeImage {
-        width: 35%;
-      }
-      .text {
-        font-size: 14px;
+        width: 40%;
       }
     }
   }
@@ -402,13 +404,7 @@
         }
       }
       .cover {
-        padding: 0;
-        width: 60%;
-        margin: 10px auto;
-        order: 1;
-        img {
-          width: 70%;
-        }
+        display: none;
       }
     }
     .categoryContainer {
@@ -426,29 +422,29 @@
 @media (max-width: 400px) {
   .homeContainer {
     .main {
+      .recipe {
+        margin-left: 0;
+        margin-right: 0;
+      }
+      .title {
+        padding-left: 0;
+        &::after {
+          left: 0;
+        }
+      }
       .noRecipeList {
         flex-wrap: wrap;
+        text-align: center;
         .noRecipeImage {
           width: 60%;
           margin-right: 0;
         }
       }
       .categoryContainer {
-        margin: 0;
+        margin: 40px 0;
         .categories {
           grid-template-columns: repeat(1, 1fr);
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 350px) {
-  .homeContainer {
-    .banner {
-      .cta {
-        .sloganContainer {
-          font-size: 12px;
+          padding: 0;
         }
       }
     }

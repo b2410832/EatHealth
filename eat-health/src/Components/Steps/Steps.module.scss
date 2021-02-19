@@ -122,8 +122,19 @@
   }
 }
 
-@media (max-width: 350px) {
+@media (max-width: 400px) {
   .step {
     flex-direction: column;
+    & > * {
+      width: 100%;
+    }
+    .content {
+      order: 1;
+      margin-bottom: 1em;
+    }
+    .upload {
+      order: 2;
+      margin-right: 0;
+    }
   }
 }

@@ -106,7 +106,7 @@
     font-size: 16px;
     width: 100px;
     height: 40px;
-    margin-left: 50px;
+    margin-left: 30px;
   }
 }
 
@@ -118,42 +118,51 @@
 @media (max-width: 700px) {
   .container {
     width: 90%;
+    .profile {
+      .navbar {
+        li {
+          margin: 0.8em 0;
+          padding: 10px 30px;
+        }
+      }
+    }
   }
 }
 
 @media (max-width: 560px) {
   .container {
     .user {
+      flex-wrap: wrap;
+      padding-bottom: 0;
       .info {
         .name {
           font-size: 1.2em;
         }
       }
-    }
-    .profile {
-      .navbar {
-        li {
-          font-size: 1em;
-          padding: 10px;
-        }
+      .datas {
+        font-size: 16px;
+        width: 80%;
+        margin: 10px 0;
       }
     }
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 450px) {
   .container {
     margin: 20px 0;
     width: 100%;
-    padding: 5px;
-    .user {
-      flex-wrap: wrap;
-      padding-bottom: 0;
-      .datas {
-        font-size: 16px;
-        width: 80%;
-        margin: 10px auto 0;
+    padding: 1em 0.5em;
+    .profile {
+      .navbar {
+        li {
+          font-size: 16px;
+          padding: 10px 20px;
+        }
       }
+    }
+    .greyBtn {
+      margin-left: 12px;
     }
   }
 }

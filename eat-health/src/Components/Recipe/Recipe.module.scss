@@ -431,6 +431,12 @@
     .recipeContainer {
       .recipe {
         .information {
+          .head {
+            div,
+            strong {
+              font-size: 16px;
+            }
+          }
           .body {
             width: 70%;
           }

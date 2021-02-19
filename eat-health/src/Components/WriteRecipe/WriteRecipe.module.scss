@@ -92,3 +92,14 @@
     letter-spacing: 2px;
   }
 }
+
+@media (max-width: 320px) {
+  .cookTime,
+  .portion {
+    .text {
+      span {
+        display: block;
+      }
+    }
+  }
+}
